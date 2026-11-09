@@ -1,0 +1,49 @@
+{
+  "code": "succoc",
+  "scientificName": "Cacatua galerita",
+  "commonName": "Sulphur-crested Cockatoo",
+  "family": "Cacatuidae",
+  "familyCommonName": "Cockatoos",
+  "taxonOrder": 12293,
+  "indigenousNames": [],
+  "sensitive": false,
+  "naturalHistory": {
+    "habitat": [
+      "woodland",
+      "forest",
+      "urban"
+    ],
+    "diet": [
+      "seeds",
+      "fruit"
+    ],
+    "nestType": "hollow",
+    "wingspanCm": [
+      95,
+      105
+    ],
+    "lengthCm": [
+      44,
+      55
+    ],
+    "clutch": [
+      2,
+      3
+    ],
+    "iucn": "LC",
+    "migration": "resident",
+    "range": "Northern and eastern Australia, New Guinea.",
+    "flavour": "Sydney flocks have learned to open wheelie bins, and teach each other.",
+    "reviewed": true
+  },
+  "sources": [
+    {
+      "title": "Wikipedia: Sulphur-crested cockatoo",
+      "url": "https://en.wikipedia.org/wiki/Sulphur-crested_cockatoo"
+    },
+    {
+      "title": "eBird/Clements taxonomy",
+      "url": "https://www.birds.cornell.edu/clementschecklist/"
+    }
+  ]
+}

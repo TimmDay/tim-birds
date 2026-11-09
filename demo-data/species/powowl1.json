@@ -1,0 +1,46 @@
+{
+  "code": "powowl1",
+  "scientificName": "Ninox strenua",
+  "commonName": "Powerful Owl",
+  "family": "Strigidae",
+  "familyCommonName": "Owls",
+  "taxonOrder": 9386,
+  "indigenousNames": [],
+  "sensitive": true,
+  "naturalHistory": {
+    "habitat": [
+      "forest"
+    ],
+    "diet": [
+      "vertebrates"
+    ],
+    "nestType": "hollow",
+    "wingspanCm": [
+      112,
+      135
+    ],
+    "lengthCm": [
+      45,
+      65
+    ],
+    "clutch": [
+      2,
+      2
+    ],
+    "iucn": "LC",
+    "migration": "resident",
+    "range": "South-eastern and eastern Australia.",
+    "flavour": "Australia's largest owl; pairs hold the same territory for years.",
+    "reviewed": true
+  },
+  "sources": [
+    {
+      "title": "Wikipedia: Powerful owl",
+      "url": "https://en.wikipedia.org/wiki/Powerful_owl"
+    },
+    {
+      "title": "eBird/Clements taxonomy",
+      "url": "https://www.birds.cornell.edu/clementschecklist/"
+    }
+  ]
+}

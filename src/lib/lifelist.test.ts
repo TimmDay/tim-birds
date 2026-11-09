@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { bestPhoto, lifeList } from './lifelist';
-import type { Sighting, Species } from './types';
+import { bestPhoto, lifeList } from './lifelist.ts';
+import type { Sighting, Species } from './types.ts';
 
 const sp = (code: string, taxonOrder: number): Species => ({
   code,

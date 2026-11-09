@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { parseEbirdExport } from './ebird';
-import type { Species } from './types';
+import { parseEbirdExport } from './ebird.ts';
+import { createTaxonomy } from './taxonomy.ts';
 
 const HEADER =
   'Submission ID,Common Name,Scientific Name,Taxonomic Order,Count,State/Province,County,Location ID,Location,Latitude,Longitude,Date,Time,Protocol,Duration (Min),All Obs Reported,Distance Traveled (km),Area Covered (ha),Number of Observers,Breeding Code,Observation Details,Checklist Comments,ML Catalog Numbers';
@@ -13,25 +13,13 @@ const csv = [
   'S102,Australian Magpie (White-backed),Gymnorhina tibicen [tibicen Group],12001,1,AU-VIC,Melbourne,L3,Royal Park,-37.78,144.95,2024-02-03,,Incidental,,0,,,1,,,,',
 ];
 
-const species: Record<string, Species> = {
-  'Dacelo novaeguineae': {
-    code: 'laukoo1',
-    scientificName: 'Dacelo novaeguineae',
-    commonName: 'Laughing Kookaburra',
-    family: 'Alcedinidae',
-    familyCommonName: 'Kingfishers',
-    taxonOrder: 9001,
-  },
-  'Gymnorhina tibicen': {
-    code: 'ausmag2',
-    scientificName: 'Gymnorhina tibicen',
-    commonName: 'Australian Magpie',
-    family: 'Artamidae',
-    familyCommonName: 'Woodswallows, Bellmagpies, and Allies',
-    taxonOrder: 12000,
-  },
-};
-const resolve = (sci: string) => species[sci];
+const { resolve } =
+  createTaxonomy(`SCIENTIFIC_NAME,COMMON_NAME,SPECIES_CODE,CATEGORY,TAXON_ORDER,FAMILY_COM_NAME,FAMILY_SCI_NAME,REPORT_AS
+Dacelo novaeguineae,Laughing Kookaburra,laukoo1,species,9001.0,Kingfishers,Alcedinidae,
+Gymnorhina tibicen,Australian Magpie,ausmag2,species,12000.0,"Woodswallows, Bellmagpies, and Allies",Artamidae,
+Gymnorhina tibicen [tibicen Group],Australian Magpie (White-backed),ausmag3,issf,12001.0,"Woodswallows, Bellmagpies, and Allies",Artamidae,ausmag2
+Anatidae sp.,duck sp.,duck,spuh,500.0,"Ducks, Geese, and Waterfowl",Anatidae,
+`);
 
 describe('parseEbirdExport', () => {
   const rows = parseEbirdExport(csv.join('\n'), resolve);
@@ -54,7 +42,7 @@ describe('parseEbirdExport', () => {
     });
   });
 
-  it('drops rows that are not a Species (spuhs, slashes, hybrids)', () => {
+  it('drops rows that are not a Species', () => {
     expect(rows.map((r) => r.id)).not.toContain('ebird-S100-undefined');
     expect(rows).toHaveLength(3);
   });

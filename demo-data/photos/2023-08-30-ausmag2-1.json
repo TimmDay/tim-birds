@@ -1,0 +1,31 @@
+{
+  "id": "2023-08-30-ausmag2-1",
+  "sightingId": "demo-06-ausmag2",
+  "takenAt": "2023-08-30T16:40:00",
+  "plumage": {
+    "primary": "black",
+    "secondary": "white"
+  },
+  "isNest": false,
+  "alt": "Demo placeholder: magpie on a lawn",
+  "image": {
+    "key": "demo-images/2023-08-30-ausmag2-1",
+    "width": 2400,
+    "height": 1600,
+    "widths": [
+      480,
+      960,
+      1600,
+      2400
+    ],
+    "placeholder": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAACwAwCdASoYABAAPu1orU2ppqSiMAgBMB2JaQAARdGTsEvLENHUQAD+31/SdnIZ1yj1/4gwjLQxoeFUAAA="
+  },
+  "camera": {
+    "body": "Demo Camera",
+    "lens": "100-400mm",
+    "focalLengthMm": 400,
+    "aperture": 6.3,
+    "shutter": "1/1000",
+    "iso": 800
+  }
+}

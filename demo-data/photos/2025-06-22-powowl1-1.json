@@ -1,0 +1,30 @@
+{
+  "id": "2025-06-22-powowl1-1",
+  "sightingId": "demo-09-powowl1",
+  "takenAt": "2025-06-22T17:30:00",
+  "plumage": {
+    "primary": "brown",
+    "secondary": "white"
+  },
+  "isNest": false,
+  "alt": "Demo placeholder: powerful owl at roost",
+  "image": {
+    "key": "demo-images/2025-06-22-powowl1-1",
+    "width": 1600,
+    "height": 2000,
+    "widths": [
+      480,
+      960,
+      1600
+    ],
+    "placeholder": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAABQBACdASoYAB4APu1irVApuaQ7sBgIA3AdiWcAuDXnwDbfAKK5ba1+GsjUAP6MU9xrdoGCIwwuneqg/df0sZVeulu/NdyYiYuuDQAA"
+  },
+  "camera": {
+    "body": "Demo Camera",
+    "lens": "100-400mm",
+    "focalLengthMm": 400,
+    "aperture": 6.3,
+    "shutter": "1/1000",
+    "iso": 800
+  }
+}

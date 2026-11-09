@@ -1,0 +1,82 @@
+---
+import '../styles/global.css';
+import SkyHeader from '../components/SkyHeader.astro';
+import { DEMO, PHOTOGRAPHER, SITE_NAME } from '../config.ts';
+
+type Props = {
+  title?: string;
+  description?: string;
+  header?: 'tall' | 'short';
+  /** Absolute URL of a social preview image. */
+  image?: string;
+};
+const {
+  title,
+  description = 'Bird photography and life list.',
+  header = 'short',
+  image,
+} = Astro.props;
+const fullTitle = title ? `${title} · ${SITE_NAME}` : SITE_NAME;
+const path = Astro.url.pathname;
+const current = path === '/' ? '/' : `/${path.split('/')[1]}/`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0e1320" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    {image && <meta property="og:image" content={image} />}
+    {DEMO && <meta name="robots" content="noindex" />}
+  </head>
+  <body>
+    {DEMO && (
+      <p class="demo-banner" role="note">
+        Demo data: placeholder images and sample records, not real Sightings.
+      </p>
+    )}
+    <SkyHeader size={header} current={current} />
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <p>
+        Photos © {PHOTOGRAPHER}, licensed{' '}
+        <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="license">
+          CC BY-NC 4.0
+        </a>
+        . Taxonomy: eBird/Clements. <a href="/data/">About the data</a>.
+      </p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .demo-banner {
+    margin: 0;
+    padding: var(--space-2) var(--gutter);
+    background: var(--color-demo);
+    color: var(--color-surface);
+    font-size: var(--text-sm);
+    text-align: center;
+    font-weight: 600;
+  }
+  footer {
+    border-top: 1px solid var(--color-line);
+    padding: var(--space-5) var(--gutter);
+    color: var(--color-ink-muted);
+    font-size: var(--text-sm);
+    text-align: center;
+  }
+  footer p {
+    margin: 0 auto;
+    max-width: 70ch;
+  }
+</style>

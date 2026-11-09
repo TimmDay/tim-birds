@@ -1,0 +1,205 @@
+---
+import Base from '../../layouts/Base.astro';
+import Picture from '../../components/Picture.astro';
+import { IMAGE_BASE, PHOTOGRAPHER } from '../../config.ts';
+import { PHOTO_LICENSE } from '../../lib/darwin-core.ts';
+import { getData, type PhotoView } from '../../lib/data.ts';
+import { formatDate } from '../../lib/format.ts';
+import { imageUrl, widthAtMost } from '../../lib/images.ts';
+import { countryName, stateName } from '../../lib/regions.ts';
+
+export async function getStaticPaths() {
+  const { photos } = await getData();
+  return photos.map((photo) => ({
+    params: { id: photo.id },
+    props: { photo },
+  }));
+}
+
+type Props = { photo: PhotoView };
+const { photo } = Astro.props;
+const { sighting: s, species: sp } = photo;
+const loc = s.location;
+const place = [
+  loc.locality,
+  s.stateProvince && stateName(s.stateProvince),
+  countryName(s.countryCode),
+]
+  .filter(Boolean)
+  .join(', ');
+const cam = photo.camera;
+const cameraLine = cam
+  ? [
+      cam.body,
+      cam.lens,
+      cam.focalLengthMm && `${cam.focalLengthMm} mm`,
+      cam.aperture && `f/${cam.aperture}`,
+      cam.shutter && `${cam.shutter} s`,
+      cam.iso && `ISO ${cam.iso}`,
+    ]
+      .filter(Boolean)
+      .join(' · ')
+  : '';
+
+// The Darwin Core terms for this Photo's Sighting, as they appear in the archive.
+const record: [string, string | number | undefined][] = [
+  ['occurrenceID', `tim-bird:sighting:${s.id}`],
+  ['basisOfRecord', 'HumanObservation'],
+  ['scientificName', sp.scientificName],
+  ['vernacularName', sp.commonName],
+  ['family', sp.family],
+  ['eventDate', s.eventTime ? `${s.eventDate}T${s.eventTime}` : s.eventDate],
+  ['individualCount', s.individualCount],
+  ['countryCode', s.countryCode],
+  ['stateProvince', s.stateProvince ? stateName(s.stateProvince) : undefined],
+  ['locality', loc.locality],
+  ['decimalLatitude', loc.decimalLatitude],
+  ['decimalLongitude', loc.decimalLongitude],
+  ['coordinateUncertaintyInMeters', loc.coordinateUncertaintyInMeters],
+  ['dataGeneralizations', loc.dataGeneralizations],
+  ['recordedBy', PHOTOGRAPHER],
+  ['license', PHOTO_LICENSE],
+];
+const ogImage = IMAGE_BASE.startsWith('http')
+  ? imageUrl(IMAGE_BASE, photo.image, widthAtMost(photo.image, 1600))
+  : undefined;
+---
+
+<Base
+  title={`${sp.commonName}, ${formatDate(photo.takenAt)}`}
+  description={`${sp.commonName} (${sp.scientificName}), photographed ${formatDate(photo.takenAt)} in ${place}.`}
+  image={ogImage}
+>
+  <article>
+    <figure>
+      <Picture
+        image={photo.image}
+        alt={photo.alt}
+        sizes="(max-width: 1200px) 100vw, 1200px"
+        priority
+      />
+      {photo.caption && <figcaption>{photo.caption}</figcaption>}
+    </figure>
+
+    <div class="info">
+      <header>
+        <h1>{sp.commonName}</h1>
+        <p class="sci">
+          <i>{sp.scientificName}</i> · {sp.familyCommonName}
+        </p>
+        <p class="when">
+          {formatDate(photo.takenAt)} · {place}
+        </p>
+        {cameraLine && <p class="camera">{cameraLine}</p>}
+        <p>
+          <a href={`/species/${sp.code}/`}>Species Card →</a>
+        </p>
+      </header>
+
+      <details class="record">
+        <summary>
+          Record details <span>(Darwin Core)</span>
+        </summary>
+        <dl>
+          {record
+            .filter(([, v]) => v !== undefined && v !== '')
+            .map(([k, v]) => (
+              <>
+                <dt>{k}</dt>
+                <dd>{v}</dd>
+              </>
+            ))}
+        </dl>
+        <p class="note">
+          {s.sensitive
+            ? 'This is a Sensitive Sighting: its location is withheld below state level.'
+            : 'Coordinates are rounded to 0.1° (about 10 km).'}
+          <a href="/data/">How the data is published</a>.
+        </p>
+      </details>
+    </div>
+  </article>
+  <p class="back">
+    <a href="/">← Gallery</a>
+  </p>
+</Base>
+
+<style>
+  figure {
+    margin: 0 0 var(--space-5);
+  }
+  /* Size the image itself (not a wider box) so the blur placeholder never shows around it. */
+  figure :global(img) {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 80dvh;
+    margin: 0 auto;
+    border-radius: var(--radius-sm);
+  }
+  figcaption {
+    color: var(--color-ink-muted);
+    font-size: var(--text-sm);
+    margin-top: var(--space-2);
+  }
+  .info {
+    display: grid;
+    gap: var(--space-5);
+  }
+  @media (min-width: 900px) {
+    .info {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+  }
+  .sci,
+  .when,
+  .camera {
+    margin: 0 0 var(--space-2);
+    color: var(--color-ink-muted);
+  }
+  .camera {
+    font-size: var(--text-sm);
+  }
+  .record {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+  }
+  summary {
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+  }
+  summary span {
+    color: var(--color-ink-muted);
+    font-size: var(--text-sm);
+    font-family: var(--font-body);
+  }
+  dl {
+    display: grid;
+    grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+    gap: var(--space-1) var(--space-4);
+    margin: var(--space-3) 0;
+    font-size: var(--text-sm);
+  }
+  dt {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    color: var(--color-ink-muted);
+    font-size: var(--text-xs);
+    padding-top: 2px;
+  }
+  dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  .note {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    margin: 0;
+  }
+  .back {
+    margin-top: var(--space-6);
+  }
+</style>

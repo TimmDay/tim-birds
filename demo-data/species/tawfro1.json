@@ -1,0 +1,45 @@
+{
+  "code": "tawfro1",
+  "scientificName": "Podargus strigoides",
+  "commonName": "Tawny Frogmouth",
+  "family": "Podargidae",
+  "familyCommonName": "Frogmouths",
+  "taxonOrder": 3803,
+  "indigenousNames": [],
+  "sensitive": false,
+  "naturalHistory": {
+    "habitat": [
+      "woodland",
+      "forest",
+      "urban"
+    ],
+    "diet": [
+      "insects",
+      "vertebrates"
+    ],
+    "nestType": "platform",
+    "lengthCm": [
+      34,
+      53
+    ],
+    "clutch": [
+      1,
+      3
+    ],
+    "iucn": "LC",
+    "migration": "resident",
+    "range": "Throughout mainland Australia and Tasmania.",
+    "flavour": "Freezes with its bill skyward to pass as a broken branch.",
+    "reviewed": false
+  },
+  "sources": [
+    {
+      "title": "Wikipedia: Tawny frogmouth",
+      "url": "https://en.wikipedia.org/wiki/Tawny_frogmouth"
+    },
+    {
+      "title": "eBird/Clements taxonomy",
+      "url": "https://www.birds.cornell.edu/clementschecklist/"
+    }
+  ]
+}

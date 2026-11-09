@@ -1,0 +1,30 @@
+{
+  "id": "2025-05-11-supfai1-1",
+  "sightingId": "demo-05-supfai1",
+  "takenAt": "2025-05-11T09:20:00",
+  "plumage": {
+    "primary": "brown"
+  },
+  "isNest": false,
+  "alt": "Demo placeholder: female fairywren",
+  "image": {
+    "key": "demo-images/2025-05-11-supfai1-1",
+    "width": 2400,
+    "height": 1600,
+    "widths": [
+      480,
+      960,
+      1600,
+      2400
+    ],
+    "placeholder": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAAAQAwCdASoYABAAPu1iqU2zpaOmMAgCcB2JYgCdMoAEhwAA/u1mZtmSJ1ZrKKbvszJnJT8TQwcAAA=="
+  },
+  "camera": {
+    "body": "Demo Camera",
+    "lens": "100-400mm",
+    "focalLengthMm": 400,
+    "aperture": 6.3,
+    "shutter": "1/1000",
+    "iso": 800
+  }
+}

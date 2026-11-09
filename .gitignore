@@ -3,6 +3,7 @@ dist/
 .astro/
 .env
 .env.*
+!.env.example
 .DS_Store
 
 # Exact Locations and the real Place of Sensitive Sightings (ADR 0003). Never commit.
@@ -15,3 +16,4 @@ inbox/
 # Test output
 test-results/
 playwright-report/
+public/demo-images/

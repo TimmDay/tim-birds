@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { publishLocation } from './location';
+import { publishLocation } from './location.ts';
 
 const lamington = {
   lat: -28.23456,

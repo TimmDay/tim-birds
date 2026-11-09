@@ -1,0 +1,50 @@
+{
+  "code": "laukoo1",
+  "scientificName": "Dacelo novaeguineae",
+  "commonName": "Laughing Kookaburra",
+  "family": "Alcedinidae",
+  "familyCommonName": "Kingfishers",
+  "taxonOrder": 10097,
+  "nickname": "The 5am alarm",
+  "indigenousNames": [],
+  "sensitive": false,
+  "naturalHistory": {
+    "habitat": [
+      "woodland",
+      "forest",
+      "urban"
+    ],
+    "diet": [
+      "vertebrates",
+      "insects"
+    ],
+    "nestType": "hollow",
+    "wingspanCm": [
+      65,
+      65
+    ],
+    "lengthCm": [
+      39,
+      42
+    ],
+    "clutch": [
+      2,
+      4
+    ],
+    "iucn": "LC",
+    "migration": "resident",
+    "range": "Eastern Australia; introduced to the south-west and Tasmania.",
+    "flavour": "Family groups laugh together at dawn and dusk to mark their territory.",
+    "reviewed": true
+  },
+  "sources": [
+    {
+      "title": "Wikipedia: Laughing kookaburra",
+      "url": "https://en.wikipedia.org/wiki/Laughing_kookaburra"
+    },
+    {
+      "title": "eBird/Clements taxonomy",
+      "url": "https://www.birds.cornell.edu/clementschecklist/"
+    }
+  ]
+}

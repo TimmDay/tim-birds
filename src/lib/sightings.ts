@@ -1,4 +1,5 @@
-import type { Sighting, SpeciesCode } from './types';
+import { withheldLocation } from './location.ts';
+import type { Sighting, SpeciesCode } from './types.ts';
 
 const byDateThenId = (a: Sighting, b: Sighting) =>
   a.eventDate.localeCompare(b.eventDate) || a.id.localeCompare(b.id);
@@ -16,9 +17,11 @@ export function mergeSightings(
   for (const next of imported) {
     const prev = byId.get(next.id);
     if (prev?.origin === 'photo') continue;
+    const sensitive = next.sensitive || (prev?.sensitive ?? false);
     byId.set(next.id, {
       ...next,
-      sensitive: next.sensitive || (prev?.sensitive ?? false),
+      sensitive,
+      location: sensitive ? withheldLocation() : next.location,
     });
   }
   return [...byId.values()].sort(byDateThenId);

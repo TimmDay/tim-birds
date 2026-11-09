@@ -1,0 +1,43 @@
+---
+import { IMAGE_BASE } from '../config.ts';
+import {
+  IMAGE_FORMATS,
+  imageUrl,
+  srcset,
+  widthAtMost,
+  type ImageInfo,
+} from '../lib/images.ts';
+
+type Props = {
+  image: ImageInfo;
+  alt: string;
+  sizes: string;
+  /** Load eagerly with high priority: only for the largest image above the fold. */
+  priority?: boolean;
+  class?: string;
+};
+const { image, alt, sizes, priority = false, class: className } = Astro.props;
+const fallback = imageUrl(IMAGE_BASE, image, widthAtMost(image, 960));
+---
+
+<picture class={className}>
+  {IMAGE_FORMATS.map((f) => (
+    <source
+      type={f.type}
+      srcset={srcset(IMAGE_BASE, image, f.ext)}
+      sizes={sizes}
+    />
+  ))}
+  <img
+    src={fallback}
+    srcset={srcset(IMAGE_BASE, image, 'jpg')}
+    sizes={sizes}
+    alt={alt}
+    width={image.width}
+    height={image.height}
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : 'auto'}
+    decoding="async"
+    style={`background-image: url(${image.placeholder}); background-size: cover;`}
+  />
+</picture>

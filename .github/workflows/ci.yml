@@ -35,5 +35,10 @@ jobs:
       - name: Unit tests
         run: pnpm test:run
 
-      - name: Build
+      - name: Production build (real data only)
         run: pnpm build
+
+      - name: Demo build (validates demo data and every page type)
+        run: pnpm build
+        env:
+          DEMO: 'true'

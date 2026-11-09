@@ -1,0 +1,44 @@
+{
+  "code": "criros2",
+  "scientificName": "Platycercus elegans",
+  "commonName": "Crimson Rosella",
+  "family": "Psittaculidae",
+  "familyCommonName": "Old World Parrots",
+  "taxonOrder": 12561,
+  "indigenousNames": [],
+  "sensitive": false,
+  "naturalHistory": {
+    "habitat": [
+      "forest",
+      "woodland"
+    ],
+    "diet": [
+      "seeds",
+      "fruit"
+    ],
+    "nestType": "hollow",
+    "lengthCm": [
+      32,
+      37
+    ],
+    "clutch": [
+      4,
+      8
+    ],
+    "iucn": "LC",
+    "migration": "resident",
+    "range": "Eastern and south-eastern Australia.",
+    "flavour": "Young birds are mostly green and redden over their first year.",
+    "reviewed": true
+  },
+  "sources": [
+    {
+      "title": "Wikipedia: Crimson rosella",
+      "url": "https://en.wikipedia.org/wiki/Crimson_rosella"
+    },
+    {
+      "title": "eBird/Clements taxonomy",
+      "url": "https://www.birds.cornell.edu/clementschecklist/"
+    }
+  ]
+}

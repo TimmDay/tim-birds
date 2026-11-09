@@ -1,3 +1,6 @@
 pnpm-lock.yaml
 dist/
 .astro/
+scripts/data/
+data/
+demo-data/

@@ -1,0 +1,31 @@
+{
+  "id": "2025-09-14-laukoo1-1",
+  "sightingId": "demo-01-laukoo1",
+  "takenAt": "2025-09-14T06:45:00",
+  "plumage": {
+    "primary": "brown",
+    "secondary": "white"
+  },
+  "isNest": false,
+  "alt": "Demo placeholder: kookaburra on a branch",
+  "image": {
+    "key": "demo-images/2025-09-14-laukoo1-1",
+    "width": 2400,
+    "height": 1600,
+    "widths": [
+      480,
+      960,
+      1600,
+      2400
+    ],
+    "placeholder": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACQAwCdASoYABAAPu1iqk2ppaQiMAgBMB2JZQCsACz1KP8oppKQAP7XOwrExg2+Wab4DiRhoPT0oapfLW1jGriJYwAAAA=="
+  },
+  "camera": {
+    "body": "Demo Camera",
+    "lens": "100-400mm",
+    "focalLengthMm": 400,
+    "aperture": 6.3,
+    "shutter": "1/1000",
+    "iso": 800
+  }
+}
