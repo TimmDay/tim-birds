@@ -13,17 +13,20 @@ export function publishLocation(
   exact: ExactLocation,
   isSensitive: boolean,
 ): PublishedLocation {
-  if (isSensitive) {
-    return {
-      dataGeneralizations:
-        'Coordinates and locality withheld (sensitive species or nest). Country and state only.',
-    };
-  }
+  if (isSensitive) return withheldLocation();
   return {
     decimalLatitude: round1(exact.lat),
     decimalLongitude: round1(exact.lon),
     coordinateUncertaintyInMeters: ROUNDED_UNCERTAINTY_M,
     ...(exact.place ? { locality: exact.place } : {}),
     dataGeneralizations: 'Coordinates rounded to 0.1 degrees.',
+  };
+}
+
+/** The Published Location of every Sensitive Sighting: no coordinates, no Place. */
+export function withheldLocation(): PublishedLocation {
+  return {
+    dataGeneralizations:
+      'Coordinates and locality withheld (sensitive species or nest). Country and state only.',
   };
 }

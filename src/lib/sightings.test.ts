@@ -57,6 +57,27 @@ describe('mergeSightings', () => {
     );
     expect(merged?.sensitive).toBe(true);
   });
+
+  it('withholds the location of a re-imported Sighting that was already sensitive', () => {
+    const existing = {
+      ...ebird('ebird-S1-laukoo1', '2025-01-01'),
+      sensitive: true,
+    };
+    const reimported: Sighting = {
+      ...ebird('ebird-S1-laukoo1', '2025-01-01'),
+      location: {
+        decimalLatitude: -28.2,
+        decimalLongitude: 153.1,
+        coordinateUncertaintyInMeters: 10000,
+        locality: 'Nest tree, Lamington NP',
+        dataGeneralizations: 'Coordinates rounded to 0.1 degrees.',
+      },
+    };
+    const [merged] = mergeSightings([existing], [reimported]);
+    expect(merged?.location.decimalLatitude).toBeUndefined();
+    expect(merged?.location.decimalLongitude).toBeUndefined();
+    expect(merged?.location.locality).toBeUndefined();
+  });
 });
 
 describe('findMatchingSightings', () => {

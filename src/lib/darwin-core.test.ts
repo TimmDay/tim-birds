@@ -39,7 +39,13 @@ const hidden: Sighting = {
   countryCode: 'AU',
   stateProvince: 'AU-NSW',
   sensitive: true,
-  location: { dataGeneralizations: 'Withheld.' },
+  // Coordinates left on a sensitive row by mistake must still never be published.
+  location: {
+    decimalLatitude: -33.9,
+    decimalLongitude: 151.2,
+    locality: 'Nest tree',
+    dataGeneralizations: 'Withheld.',
+  },
 };
 
 const photo: Photo = {
@@ -67,7 +73,8 @@ describe('toDarwinCore', () => {
 
   it('maps a Sighting to a Darwin Core Occurrence', () => {
     expect(occurrences[0]).toEqual({
-      occurrenceID: 'https://tim-bird.pages.dev/sightings/ebird-S100-laukoo1',
+      occurrenceID: 'tim-bird:sighting:ebird-S100-laukoo1',
+      references: 'https://tim-bird.pages.dev/sightings/ebird-S100-laukoo1/',
       basisOfRecord: 'HumanObservation',
       occurrenceStatus: 'present',
       recordedBy: 'Tim Day',
@@ -99,10 +106,13 @@ describe('toDarwinCore', () => {
     const row = occurrences[1];
     expect(row).toMatchObject({
       stateProvince: 'New South Wales',
-      dataGeneralizations: 'Withheld.',
+      dataGeneralizations:
+        'Coordinates and locality withheld (sensitive species or nest). Country and state only.',
     });
     expect(row?.decimalLatitude).toBe('');
     expect(row?.locality).toBe('');
+    expect(row?.decimalLongitude).toBe('');
+    expect(row?.coordinateUncertaintyInMeters).toBe('');
     expect(row?.geodeticDatum).toBe('');
     expect(row?.dynamicProperties).toBe('');
   });
@@ -110,7 +120,7 @@ describe('toDarwinCore', () => {
   it('maps each Photo to a Simple Multimedia row on its Occurrence', () => {
     expect(multimedia).toEqual([
       {
-        coreid: 'https://tim-bird.pages.dev/sightings/ebird-S100-laukoo1',
+        coreid: 'tim-bird:sighting:ebird-S100-laukoo1',
         type: 'StillImage',
         format: 'image/jpeg',
         identifier: 'https://img.example/p1/2000.jpg',

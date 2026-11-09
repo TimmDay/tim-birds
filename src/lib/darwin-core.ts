@@ -1,3 +1,4 @@
+import { withheldLocation } from './location';
 import { countryName, stateName } from './regions';
 import type { Photo, Sighting, Species, SpeciesCode } from './types';
 
@@ -15,6 +16,7 @@ type Row = Record<string, string>;
 /** Darwin Core Occurrence terms, in archive column order. */
 export const OCCURRENCE_TERMS = [
   'occurrenceID',
+  'references',
   'basisOfRecord',
   'occurrenceStatus',
   'recordedBy',
@@ -66,16 +68,19 @@ export function toDarwinCore(
   species: Record<SpeciesCode, Species>,
   config: DwcConfig,
 ): { occurrences: Row[]; multimedia: Row[] } {
-  const occurrenceId = (s: Sighting) => `${config.siteUrl}/sightings/${s.id}`;
+  // Stable across domain changes: the page URL goes in `references`, not the ID.
+  const occurrenceId = (s: Sighting) => `tim-bird:sighting:${s.id}`;
   const photosBySighting = Map.groupBy(photos, (p) => p.sightingId);
   const sightingById = new Map(sightings.map((s) => [s.id, s]));
 
   const occurrences = sightings.map((s): Row => {
     const sp = species[s.speciesCode];
-    const loc = s.location;
+    // Gate on the flag, not on whether coordinates happen to be present.
+    const loc = s.sensitive ? withheldLocation() : s.location;
     const hasCoords = loc.decimalLatitude !== undefined;
     return {
       occurrenceID: occurrenceId(s),
+      references: `${config.siteUrl}/sightings/${s.id}/`,
       basisOfRecord: 'HumanObservation',
       occurrenceStatus: 'present',
       recordedBy: config.recordedBy,

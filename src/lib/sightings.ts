@@ -1,3 +1,4 @@
+import { withheldLocation } from './location';
 import type { Sighting, SpeciesCode } from './types';
 
 const byDateThenId = (a: Sighting, b: Sighting) =>
@@ -16,9 +17,11 @@ export function mergeSightings(
   for (const next of imported) {
     const prev = byId.get(next.id);
     if (prev?.origin === 'photo') continue;
+    const sensitive = next.sensitive || (prev?.sensitive ?? false);
     byId.set(next.id, {
       ...next,
-      sensitive: next.sensitive || (prev?.sensitive ?? false),
+      sensitive,
+      location: sensitive ? withheldLocation() : next.location,
     });
   }
   return [...byId.values()].sort(byDateThenId);
