@@ -26,7 +26,7 @@ pnpm build      # static build into dist/ (real data/)
 pnpm demo       # dev server on the demo dataset (DEMO=true)
 ```
 
-Data CLIs (see [docs/adding-photos.md](docs/adding-photos.md)): `import-ebird`, `add-photo`, `best-photo`, `mark-sensitive`, `sync-photos`. They write `data/` (committed) and `private/` (never committed).
+Data CLIs (see [docs/adding-photos.md](docs/adding-photos.md); Species Cards: [docs/drafting-cards.md](docs/drafting-cards.md)): `import-ebird`, `add-photo`, `best-photo`, `mark-sensitive`, `sync-photos`. They write `data/` (committed) and `private/` (never committed).
 
 ## Development
 
