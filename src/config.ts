@@ -5,7 +5,10 @@ export const DEMO =
   import.meta.env.DEMO === 'true' || process.env.DEMO === 'true';
 
 export const SITE_NAME = 'tim-bird';
-export const SITE_URL = 'https://tim-bird.pages.dev';
+/** From `site` in astro.config.mjs, so there is one place to change it. */
+export const SITE_URL = (
+  import.meta.env.SITE ?? 'https://tim-bird.pages.dev'
+).replace(/\/$/, '');
 export const PHOTOGRAPHER = 'Tim Day';
 
 /** Where Photo derivatives are served from: R2 in production, the local demo folder in demo mode. */

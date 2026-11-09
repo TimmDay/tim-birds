@@ -60,3 +60,22 @@ describe('parseEbirdExport', () => {
     expect(rows[2]?.eventTime).toBeUndefined();
   });
 });
+
+describe('parseEbirdExport header check', () => {
+  it('fails loudly, listing the headers it found, when expected columns are missing', () => {
+    expect(() => parseEbirdExport('Foo,Bar\n1,2\n', resolve)).toThrow(
+      /Scientific Name.*Found: Foo, Bar/s,
+    );
+  });
+});
+
+describe('parseEbirdExport place overrides', () => {
+  it('renames or blanks a Place before it is published, keeping nothing of the original', () => {
+    const rows = parseEbirdExport(csv.join('\n'), resolve, {
+      "O'Reilly's, Lamington NP": 'Lamington NP',
+      'Centennial Park': null,
+    });
+    expect(rows[0]?.exact.place).toBe('Lamington NP');
+    expect(rows[1]?.exact.place).toBeUndefined();
+  });
+});

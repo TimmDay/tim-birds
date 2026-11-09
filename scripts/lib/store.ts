@@ -123,3 +123,8 @@ type Originals = Record<string, { path: string; sha256: string }>;
 const originalsPath = join(PRIVATE, 'originals.json');
 export const readOriginals = () => readJson<Originals>(originalsPath, {});
 export const writeOriginals = (o: Originals) => writeJson(originalsPath, o);
+
+type PlaceOverrides = Record<string, string | null>;
+export const PLACE_OVERRIDES_PATH = join(PRIVATE, 'place-overrides.json');
+export const readPlaceOverrides = () =>
+  readJson<PlaceOverrides>(PLACE_OVERRIDES_PATH, {});

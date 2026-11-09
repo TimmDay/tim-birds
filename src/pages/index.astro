@@ -112,8 +112,6 @@ const placeLine = (p: (typeof photos)[number]) =>
   const title = dialog?.querySelector<HTMLElement>('.lb-title');
   const meta = dialog?.querySelector<HTMLElement>('.lb-meta');
   const link = dialog?.querySelector<HTMLAnchorElement>('.lb-link');
-  const galleryUrl = () => `${location.pathname}${location.search}`;
-  let returnTo = galleryUrl();
   let current: HTMLAnchorElement | undefined;
 
   const visibleLinks = () =>
@@ -160,12 +158,13 @@ const placeLine = (p: (typeof photos)[number]) =>
     const a = (e.target as Element).closest<HTMLAnchorElement>('.tile a');
     if (!a) return;
     e.preventDefault();
-    returnTo = galleryUrl();
     show(a, true);
   });
 
+  // Closing steps back to the gallery entry, so Back doesn't reopen the photo URL.
+  // (When Back closed it, the state is already the gallery's.)
   dialog?.addEventListener('close', () => {
-    if (history.state?.lightbox) history.pushState(null, '', returnTo);
+    if (history.state?.lightbox) history.back();
   });
   dialog?.addEventListener('click', (e) => {
     if (e.target === dialog) close();

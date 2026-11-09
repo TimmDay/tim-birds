@@ -20,6 +20,8 @@ export type Taxonomy = {
   /** An eBird scientific name (any category) → the Species it counts as, if any. */
   resolve: (scientificName: string) => Species | undefined;
   byCode: (code: SpeciesCode) => Species | undefined;
+  /** True for any name in the taxonomy, including ones that never count (spuhs, slashes, hybrids, domestics). */
+  knows: (scientificName: string) => boolean;
   /** Every Species, in taxonomic order. */
   all: () => Species[];
 };
@@ -53,6 +55,7 @@ export function createTaxonomy(csv: string): Taxonomy {
       return undefined;
     },
     byCode: (code) => species.get(code),
+    knows: (name) => rowsByName.has(name.trim()),
     all: () => [...species.values()],
   };
 }
