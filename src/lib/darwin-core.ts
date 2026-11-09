@@ -75,12 +75,20 @@ export function toDarwinCore(
 
   const occurrences = sightings.map((s): Row => {
     const sp = species[s.speciesCode];
+    const firstPhoto = photosBySighting.get(s.id)?.[0];
     // Gate on the flag, not on whether coordinates happen to be present.
     const loc = s.sensitive ? withheldLocation() : s.location;
     const hasCoords = loc.decimalLatitude !== undefined;
     return {
       occurrenceID: occurrenceId(s),
-      references: `${config.siteUrl}/sightings/${s.id}/`,
+      // eBird checklist when public (a checklist ID can locate a Sensitive
+      // Sighting), else the first Photo's page, else nothing.
+      references:
+        s.ebirdChecklistId && !s.sensitive
+          ? `https://ebird.org/checklist/${s.ebirdChecklistId}`
+          : firstPhoto
+            ? `${config.siteUrl}/photos/${firstPhoto.id}/`
+            : '',
       basisOfRecord: 'HumanObservation',
       occurrenceStatus: 'present',
       recordedBy: config.recordedBy,

@@ -1,0 +1,162 @@
+---
+import Base from '../../layouts/Base.astro';
+import { ARCHIVE_PATH, darwinCore } from '../../lib/archive.ts';
+import { getData } from '../../lib/data.ts';
+
+const { sightings, photos, cards } = await getData();
+const { occurrences } = await darwinCore();
+const sensitive = sightings.filter((s) => s.sensitive).length;
+const photoSightings = sightings.filter((s) => s.origin === 'photo').length;
+const sample = occurrences.find((o) => o.associatedMedia) ?? occurrences[0];
+---
+
+<Base title="Data" description="How this site's bird records are modelled and published as Darwin Core.">
+  <div class="prose">
+    <h1>About the data</h1>
+    <p class="lede">
+      Every record here is published to the
+      <a href="https://dwc.tdwg.org/">Darwin Core</a> standard, the format GBIF and the
+      Atlas of Living Australia use to share biodiversity occurrence data.
+    </p>
+
+    <section class="download">
+      <a class="button" href={ARCHIVE_PATH} download>Download the Darwin Core Archive</a>
+      <p>
+        {sightings.length} Occurrences, {photos.length} images, {cards.length} species.
+        Occurrence core with the GBIF Simple Multimedia extension, plus <code>meta.xml</code> and
+        <code>eml.xml</code>. Rebuilt on every deploy.
+      </p>
+    </section>
+
+    <h2>The model</h2>
+    <p>
+      The record is a <strong>Sighting</strong>: one species, one place, one time. In Darwin
+      Core that is an Occurrence with <code>basisOfRecord = HumanObservation</code>. Photos are
+      evidence attached to a Sighting, published as multimedia rows. They are never the record
+      themselves.
+    </p>
+    <ul>
+      <li>
+        <strong>eBird Sightings</strong> are imported from eBird checklists, which are the source of
+        truth for them. The checklist ID is kept in <code>dynamicProperties</code>.
+      </li>
+      <li>
+        <strong>Photo Sightings</strong> ({photoSightings} here) cover photos from outings that were
+        never logged to eBird. They exist only on this site and are never sent to eBird.
+      </li>
+    </ul>
+    <p>
+      The Life List is derived from Sightings. Taxonomy follows the
+      <a href="https://www.birds.cornell.edu/clementschecklist/">eBird/Clements checklist</a>:
+      subspecies groups count toward their species, and spuhs, slashes, hybrids and domestic
+      types never count.
+    </p>
+
+    <h2>Location generalisation</h2>
+    <ul>
+      <li>
+        Coordinates are rounded to 0.1° (about 10 km). <code>coordinateUncertaintyInMeters</code> is
+        set to 10000 and <code>dataGeneralizations</code> says so.
+      </li>
+      <li>
+        <strong>Sensitive Sightings</strong> ({sensitive} here) are of species flagged sensitive (roosting owls,
+        threatened species) or of nests. They publish country and state only, with no coordinates and
+        no locality.
+      </li>
+      <li>
+        Exact coordinates are kept privately and never enter the public repository. The site's build
+        rejects any committed coordinate that is not on the 0.1° grid, and any coordinate or place on a
+        Sensitive Sighting.
+      </li>
+    </ul>
+
+    <h2>Licence</h2>
+    <p>
+      Records and images are <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>.
+      Please credit Tim Day.
+    </p>
+
+    {
+      sample && (
+        <>
+          <h2>One record, as published</h2>
+          <dl class="record">
+            {Object.entries(sample)
+              .filter(([, v]) => v !== '')
+              .map(([k, v]) => (
+                <>
+                  <dt>{k}</dt>
+                  <dd>{v}</dd>
+                </>
+              ))}
+          </dl>
+        </>
+      )
+    }
+
+    <h2>Source</h2>
+    <p>
+      The code, schemas and tests are public on
+      <a href="https://github.com/TimmDay/tim-birds">GitHub</a>, including the
+      <a href="https://github.com/TimmDay/tim-birds/blob/main/GLOSSARY.md">glossary</a> and
+      <a href="https://github.com/TimmDay/tim-birds/tree/main/docs/adr">decision records</a>.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .prose {
+    max-width: 68ch;
+  }
+  .lede {
+    font-size: var(--text-lg);
+  }
+  h2 {
+    margin-top: var(--space-6);
+  }
+  code {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 0.88em;
+    color: var(--color-gold);
+  }
+  .download {
+    margin: var(--space-5) 0;
+    padding: var(--space-4);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-raised);
+  }
+  .download p {
+    margin: var(--space-3) 0 0;
+    color: var(--color-ink-muted);
+    font-size: var(--text-sm);
+  }
+  .button {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    border-radius: 999px;
+    background: var(--color-first-light);
+    color: var(--color-surface);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .record {
+    display: grid;
+    grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+    gap: var(--space-1) var(--space-4);
+    font-size: var(--text-sm);
+    background: var(--color-surface-sunken);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+  }
+  .record dt {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    color: var(--color-ink-muted);
+    font-size: var(--text-xs);
+    padding-top: 2px;
+  }
+  .record dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+</style>
