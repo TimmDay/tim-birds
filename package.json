@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "if [ \"$DEMO\" = \"true\" ]; then node scripts/make-demo.ts; fi",
+    "prebuild": "node scripts/copy-maplibre-worker.ts && if [ \"$DEMO\" = \"true\" ]; then node scripts/make-demo.ts; fi",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -25,7 +25,9 @@
     "add-photo": "node scripts/add-photo.ts",
     "best-photo": "node scripts/best-photo.ts",
     "sync-photos": "node scripts/sync-photos.ts",
-    "mark-sensitive": "node scripts/mark-sensitive.ts"
+    "mark-sensitive": "node scripts/mark-sensitive.ts",
+    "postinstall": "node scripts/copy-maplibre-worker.ts",
+    "predev": "node scripts/copy-maplibre-worker.ts"
   },
   "lint-staged": {
     "*.{ts,js,mjs,astro,svelte}": [
@@ -46,6 +48,7 @@
     "astro": "^7.4.7",
     "csv-parse": "^7.0.3",
     "fflate": "^0.8.3",
+    "maplibre-gl": "^6.17.0",
     "sharp": "^0.35.5",
     "svelte": "^5.57.3"
   },

@@ -18,3 +18,4 @@ test-results/
 playwright-report/
 public/demo-images/
 public/p/
+public/vendor/

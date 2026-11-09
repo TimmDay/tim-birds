@@ -1,0 +1,234 @@
+---
+import Base from '../layouts/Base.astro';
+import { getData } from '../lib/data.ts';
+import { formatDate } from '../lib/format.ts';
+
+const { sightings, species, photos } = await getData();
+const firstPhoto = new Map<string, string>();
+for (const p of [...photos].reverse()) firstPhoto.set(p.sighting.id, p.id);
+
+// Published Locations only. Sensitive Sightings carry no coordinates and never appear.
+const mapped = sightings.filter(
+  (s) =>
+    !s.sensitive &&
+    s.location.decimalLatitude !== undefined &&
+    s.location.decimalLongitude !== undefined,
+);
+const geojson = {
+  type: 'FeatureCollection',
+  features: mapped.map((s) => ({
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [s.location.decimalLongitude, s.location.decimalLatitude],
+    },
+    properties: {
+      name: species[s.speciesCode]?.commonName ?? s.speciesCode,
+      date: formatDate(s.eventDate),
+      place: s.location.locality ?? '',
+      href: firstPhoto.has(s.id)
+        ? `/photos/${firstPhoto.get(s.id)}/`
+        : `/species/${s.speciesCode}/`,
+      hasPhoto: firstPhoto.has(s.id),
+    },
+  })),
+};
+const withheld = sightings.length - mapped.length;
+---
+
+<Base
+  title="Map"
+  description="Where the Sightings were made, at about 10 km resolution."
+>
+  <h1>Map</h1>
+  <p class="page-intro">
+    {mapped.length} Sightings, each placed at its Published Location (rounded to
+    about 10 km).
+    {withheld > 0 && ` ${withheld} Sensitive Sightings are left off.`}
+  </p>
+  <div
+    id="map"
+    data-points={JSON.stringify(geojson)}
+    role="region"
+    aria-label="Map of Sightings"
+  >
+    <noscript>
+      <p>
+        The map needs JavaScript. The <a href="/species/">Species</a> pages list
+        every Sighting.
+      </p>
+    </noscript>
+  </div>
+  <p class="credit">
+    Points rounded to 0.1°. Base map ©{' '}
+    <a href="https://openfreemap.org">OpenFreeMap</a>,
+    <a href="https://www.openstreetmap.org/copyright">
+      OpenStreetMap contributors
+    </a>
+    .
+  </p>
+</Base>
+
+<script>
+  import 'maplibre-gl/dist/maplibre-gl.css';
+
+  const el = document.getElementById('map');
+  if (el) {
+    const {
+      Map: MlMap,
+      Popup,
+      NavigationControl,
+      setWorkerUrl,
+    } = await import('maplibre-gl');
+    setWorkerUrl('/vendor/maplibre-gl-worker.mjs');
+    const data = JSON.parse(el.dataset.points ?? '{}');
+    const accent = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-first-light')
+      .trim();
+    const ink = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-surface')
+      .trim();
+
+    const map = new MlMap({
+      container: el,
+      style: 'https://tiles.openfreemap.org/styles/dark',
+      center: [134, -27],
+      zoom: 2.6,
+      attributionControl: { compact: true },
+    });
+    map.addControl(new NavigationControl({ showCompass: false }));
+
+    map.on('load', () => {
+      map.addSource('sightings', {
+        type: 'geojson',
+        data,
+        cluster: true,
+        clusterRadius: 40,
+        clusterMaxZoom: 11,
+      });
+      map.addLayer({
+        id: 'clusters',
+        type: 'circle',
+        source: 'sightings',
+        filter: ['has', 'point_count'],
+        paint: {
+          'circle-color': accent,
+          'circle-opacity': 0.85,
+          'circle-radius': ['step', ['get', 'point_count'], 14, 10, 18, 50, 24],
+          'circle-stroke-width': 2,
+          'circle-stroke-color': ink,
+        },
+      });
+      map.addLayer({
+        id: 'cluster-count',
+        type: 'symbol',
+        source: 'sightings',
+        filter: ['has', 'point_count'],
+        layout: {
+          'text-field': ['get', 'point_count_abbreviated'],
+          'text-size': 12,
+          'text-font': ['Noto Sans Bold'],
+        },
+        paint: { 'text-color': ink },
+      });
+      map.addLayer({
+        id: 'points',
+        type: 'circle',
+        source: 'sightings',
+        filter: ['!', ['has', 'point_count']],
+        paint: {
+          'circle-color': accent,
+          'circle-radius': 7,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': ink,
+        },
+      });
+
+      // Fit to the data when there is any.
+      const coords: [number, number][] = data.features.map(
+        (f: { geometry: { coordinates: [number, number] } }) =>
+          f.geometry.coordinates,
+      );
+      if (coords.length > 1) {
+        const lons = coords.map((c) => c[0]);
+        const lats = coords.map((c) => c[1]);
+        map.fitBounds(
+          [
+            [Math.min(...lons), Math.min(...lats)],
+            [Math.max(...lons), Math.max(...lats)],
+          ],
+          { padding: 60, maxZoom: 8 },
+        );
+      }
+
+      map.on('click', 'clusters', async (e) => {
+        const f = e.features?.[0];
+        if (!f || f.geometry.type !== 'Point') return;
+        const src = map.getSource(
+          'sightings',
+        ) as import('maplibre-gl').GeoJSONSource;
+        const zoom = await src.getClusterExpansionZoom(f.properties.cluster_id);
+        map.easeTo({
+          center: f.geometry.coordinates as [number, number],
+          zoom,
+        });
+      });
+      map.on('click', 'points', (e) => {
+        const f = e.features?.[0];
+        if (!f || f.geometry.type !== 'Point') return;
+        const p = f.properties;
+        const body = document.createElement('div');
+        const title = document.createElement('strong');
+        title.textContent = p.name;
+        const meta = document.createElement('p');
+        meta.textContent = [p.place, p.date].filter(Boolean).join(' · ');
+        const link = document.createElement('a');
+        link.href = p.href;
+        link.textContent = p.hasPhoto ? 'See the photo →' : 'Species Card →';
+        body.append(title, meta, link);
+        new Popup({ offset: 10 })
+          .setLngLat(f.geometry.coordinates as [number, number])
+          .setDOMContent(body)
+          .addTo(map);
+      });
+      for (const layer of ['clusters', 'points']) {
+        map.on(
+          'mouseenter',
+          layer,
+          () => (map.getCanvas().style.cursor = 'pointer'),
+        );
+        map.on('mouseleave', layer, () => (map.getCanvas().style.cursor = ''));
+      }
+    });
+  }
+</script>
+
+<style>
+  #map {
+    height: min(70dvh, 640px);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    background: var(--color-surface-sunken);
+  }
+  .credit {
+    font-size: var(--text-xs);
+    color: var(--color-ink-muted);
+  }
+  #map :global(.maplibregl-popup-content) {
+    background: var(--color-surface-raised);
+    color: var(--color-ink);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    padding: var(--space-3) var(--space-4);
+  }
+  #map :global(.maplibregl-popup-content p) {
+    margin: var(--space-1) 0;
+    color: var(--color-ink-muted);
+    font-size: var(--text-sm);
+  }
+  #map :global(.maplibregl-popup-tip) {
+    border-top-color: var(--color-surface-raised);
+    border-bottom-color: var(--color-surface-raised);
+  }
+</style>
