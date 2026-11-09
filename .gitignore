@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+.DS_Store
+
+# Exact Locations and the real Place of Sensitive Sightings (ADR 0003). Never commit.
+private/
+
+# Original photo files and CLI working folders. Only derivatives on R2 are published.
+originals/
+inbox/
+
+# Test output
+test-results/
+playwright-report/
