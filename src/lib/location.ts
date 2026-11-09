@@ -14,6 +14,12 @@ export function publishLocation(
   isSensitive: boolean,
 ): PublishedLocation {
   if (isSensitive) return withheldLocation();
+  if (exact.lat === undefined || exact.lon === undefined) {
+    return {
+      ...(exact.place ? { locality: exact.place } : {}),
+      dataGeneralizations: 'No coordinates recorded.',
+    };
+  }
   return {
     decimalLatitude: round1(exact.lat),
     decimalLongitude: round1(exact.lon),

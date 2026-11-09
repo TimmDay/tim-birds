@@ -37,3 +37,20 @@ export function findMatchingSightings(
     (s) => s.speciesCode === speciesCode && s.eventDate === date,
   );
 }
+
+/**
+ * Makes every Sighting of a sensitive Species, and every Sighting with a nest
+ * Photo, sensitive with its location withheld. Never un-withholds: clearing a
+ * flag needs the Exact Location from private/, so it is a deliberate step.
+ */
+export function applySensitivity(
+  sightings: Sighting[],
+  rules: { sensitiveSpecies: Set<SpeciesCode>; nestSightings: Set<string> },
+): Sighting[] {
+  return sightings.map((s) =>
+    !s.sensitive &&
+    (rules.sensitiveSpecies.has(s.speciesCode) || rules.nestSightings.has(s.id))
+      ? { ...s, sensitive: true, location: withheldLocation() }
+      : s,
+  );
+}

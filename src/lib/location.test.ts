@@ -31,4 +31,11 @@ describe('publishLocation', () => {
     expect(out.decimalLongitude).toBe(151.2);
     expect(out.locality).toBeUndefined();
   });
+
+  it('publishes only the Place when no coordinates were recorded', () => {
+    expect(publishLocation({ place: 'Zealandia' }, false)).toEqual({
+      locality: 'Zealandia',
+      dataGeneralizations: 'No coordinates recorded.',
+    });
+  });
 });

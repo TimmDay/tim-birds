@@ -22,8 +22,11 @@ Tim Day's bird photography gallery and Life List, working name tim-bird. It is a
 ```sh
 pnpm check      # lint + astro check
 pnpm test:run   # unit tests (Vitest)
-pnpm build      # static build into dist/
+pnpm build      # static build into dist/ (real data/)
+pnpm demo       # dev server on the demo dataset (DEMO=true)
 ```
+
+Data CLIs (see [docs/adding-photos.md](docs/adding-photos.md)): `import-ebird`, `add-photo`, `best-photo`, `mark-sensitive`, `sync-photos`. They write `data/` (committed) and `private/` (never committed).
 
 ## Development
 
