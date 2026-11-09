@@ -6,7 +6,7 @@ import {
   filtersToSearch,
   type Filters,
   type GalleryPhoto,
-} from './filters';
+} from './filters.ts';
 
 const photo = (id: string, over: Partial<GalleryPhoto>): GalleryPhoto => ({
   id,

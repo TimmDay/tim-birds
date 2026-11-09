@@ -1,0 +1,26 @@
+{
+  "id": "2025-10-04-rabeat1-1",
+  "sightingId": "demo-10-rabeat1",
+  "takenAt": "2025-10-04T07:00:00",
+  "plumage": {
+    "primary": "green",
+    "secondary": "orange"
+  },
+  "isNest": false,
+  "alt": "Demo placeholder: bee-eater with a dragonfly",
+  "image": {
+    "key": "demo-images/2025-10-04-rabeat1-1",
+    "width": 2400,
+    "height": 1600,
+    "widths": [480, 960, 1600, 2400],
+    "placeholder": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAADwAgCdASoYABAAPu1iqU26JaQmMAgDQB2JaACdAC5JAAD+w7/IvMh/+6HlDXjgmRyvdwN48bTPbQAYb0ru8TTCCqAAAA=="
+  },
+  "camera": {
+    "body": "Demo Camera",
+    "lens": "100-400mm",
+    "focalLengthMm": 400,
+    "aperture": 6.3,
+    "shutter": "1/1000",
+    "iso": 800
+  }
+}

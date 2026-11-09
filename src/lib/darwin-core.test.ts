@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { toDarwinCore, toTsv } from './darwin-core';
-import type { Photo, Sighting, Species } from './types';
+import { toDarwinCore, toTsv } from './darwin-core.ts';
+import type { Photo, Sighting, Species } from './types.ts';
 
 const kookaburra: Species = {
   code: 'laukoo1',

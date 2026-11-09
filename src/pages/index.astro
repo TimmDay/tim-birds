@@ -1,14 +1,339 @@
 ---
-const title = 'tim-bird';
+import Base from '../layouts/Base.astro';
+import GalleryFilters from '../components/GalleryFilters.svelte';
+import Picture from '../components/Picture.astro';
+import { getData, toGalleryPhoto } from '../lib/data.ts';
+import { countryName, stateName } from '../lib/regions.ts';
+import { PLUMAGE_COLORS } from '../lib/types.ts';
+import { formatDate } from '../lib/format.ts';
+
+const { photos, species } = await getData();
+const gallery = photos.map(toGalleryPhoto);
+
+const uniq = <T,>(xs: T[]) => [...new Set(xs)];
+const speciesOptions = Object.values(species)
+  .filter((s) => photos.some((p) => p.species.code === s.code))
+  .sort((a, b) => a.taxonOrder - b.taxonOrder)
+  .map((s) => ({ value: s.code, label: s.commonName }));
+const countries = uniq(photos.map((p) => p.sighting.countryCode))
+  .map((c) => ({ value: c, label: countryName(c) }))
+  .sort((a, b) => a.label.localeCompare(b.label));
+const states = uniq(photos.flatMap((p) => p.sighting.stateProvince ?? []))
+  .map((s) => ({ value: s, label: stateName(s), country: s.slice(0, 2) }))
+  .sort((a, b) => a.label.localeCompare(b.label));
+const years = uniq(photos.map((p) => Number(p.takenAt.slice(0, 4)))).sort(
+  (a, b) => b - a,
+);
+const colors = PLUMAGE_COLORS.filter((c) =>
+  photos.some((p) => p.plumage.primary === c || p.plumage.secondary === c),
+);
+
+const placeLine = (p: (typeof photos)[number]) =>
+  [
+    p.sighting.location.locality,
+    p.sighting.stateProvince && stateName(p.sighting.stateProvince),
+    countryName(p.sighting.countryCode),
+  ]
+    .filter(Boolean)
+    .join(', ');
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-  </head>
-  <body>
-    <h1>{title}</h1>
-  </body>
-</html>
+<Base
+  header="tall"
+  description="A gallery of bird photographs, filterable by species, place, year and Plumage Color."
+>
+  <h1 class="visually-hidden">Gallery</h1>
+  {photos.length === 0 ? (
+    <p class="empty">No Photos yet. The first ones are on their way.</p>
+  ) : (
+    <>
+      <GalleryFilters
+        client:idle
+        photos={gallery}
+        species={speciesOptions}
+        countries={countries}
+        states={states}
+        years={years}
+        colors={colors}
+      />
+      <ul class="grid">
+        {photos.map((p, i) => (
+          <li
+            data-photo-id={p.id}
+            class:list={['tile', { portrait: p.image.height > p.image.width }]}
+          >
+            <a
+              href={`/photos/${p.id}/`}
+              data-title={p.species.commonName}
+              data-meta={`${placeLine(p)} · ${formatDate(p.takenAt)}`}
+            >
+              <Picture
+                image={p.image}
+                alt={p.alt}
+                sizes="(max-width: 719px) 50vw, (max-width: 1200px) 33vw, 400px"
+                priority={i < 2}
+              />
+              <span class="label">{p.species.commonName}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
+
+  <dialog id="lightbox" aria-label="Photo">
+    <div class="lb-frame"></div>
+    <div class="lb-caption">
+      <div>
+        <strong class="lb-title"></strong>
+        <span class="lb-meta"></span>
+      </div>
+      <a class="lb-link" href="/">
+        Full record →
+      </a>
+    </div>
+    <button class="lb-btn lb-close" type="button" aria-label="Close">
+      ×
+    </button>
+    <button class="lb-btn lb-prev" type="button" aria-label="Previous photo">
+      ‹
+    </button>
+    <button class="lb-btn lb-next" type="button" aria-label="Next photo">
+      ›
+    </button>
+  </dialog>
+</Base>
+
+<script>
+  // The lightbox. Each tile is a real link to /photos/<id>/, which works without
+  // JS; with JS a plain click opens the photo here and puts its URL in history.
+  const dialog = document.querySelector<HTMLDialogElement>('#lightbox');
+  const frame = dialog?.querySelector<HTMLElement>('.lb-frame');
+  const title = dialog?.querySelector<HTMLElement>('.lb-title');
+  const meta = dialog?.querySelector<HTMLElement>('.lb-meta');
+  const link = dialog?.querySelector<HTMLAnchorElement>('.lb-link');
+  const galleryUrl = () => `${location.pathname}${location.search}`;
+  let returnTo = galleryUrl();
+  let current: HTMLAnchorElement | undefined;
+
+  const visibleLinks = () =>
+    [...document.querySelectorAll<HTMLElement>('[data-photo-id]:not([hidden])')]
+      .sort((a, b) => Number(a.style.order) - Number(b.style.order))
+      .map((li) => li.querySelector('a'))
+      .filter((a): a is HTMLAnchorElement => a !== null);
+
+  function show(a: HTMLAnchorElement, push: boolean) {
+    if (!dialog || !frame || !title || !meta || !link) return;
+    current = a;
+    const picture = a.querySelector('picture')?.cloneNode(true) as
+      HTMLElement | undefined;
+    picture
+      ?.querySelectorAll('source, img')
+      .forEach((el) => el.setAttribute('sizes', '92vw'));
+    picture?.querySelector('img')?.setAttribute('loading', 'eager');
+    frame.replaceChildren(...(picture ? [picture] : []));
+    title.textContent = a.dataset.title ?? '';
+    meta.textContent = a.dataset.meta ?? '';
+    link.href = a.href;
+    if (push) history.pushState({ lightbox: true }, '', a.href);
+    else history.replaceState({ lightbox: true }, '', a.href);
+    if (!dialog.open) dialog.showModal();
+  }
+
+  function step(delta: number) {
+    const links = visibleLinks();
+    if (!current || links.length === 0) return;
+    const i = links.indexOf(current);
+    const next = links[(i + delta + links.length) % links.length];
+    if (next) show(next, false);
+  }
+
+  function close() {
+    if (!dialog?.open) return;
+    dialog.close();
+  }
+
+  document.querySelector('.grid')?.addEventListener('click', (e) => {
+    const me = e as MouseEvent;
+    if (me.metaKey || me.ctrlKey || me.shiftKey || me.altKey || me.button !== 0)
+      return;
+    const a = (e.target as Element).closest<HTMLAnchorElement>('.tile a');
+    if (!a) return;
+    e.preventDefault();
+    returnTo = galleryUrl();
+    show(a, true);
+  });
+
+  dialog?.addEventListener('close', () => {
+    if (history.state?.lightbox) history.pushState(null, '', returnTo);
+  });
+  dialog?.addEventListener('click', (e) => {
+    if (e.target === dialog) close();
+  });
+  dialog?.querySelector('.lb-close')?.addEventListener('click', close);
+  dialog?.querySelector('.lb-prev')?.addEventListener('click', () => step(-1));
+  dialog?.querySelector('.lb-next')?.addEventListener('click', () => step(1));
+  dialog?.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
+  });
+  window.addEventListener('popstate', () => {
+    if (!history.state?.lightbox) close();
+  });
+</script>
+
+<style>
+  .empty {
+    color: var(--color-ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    text-align: center;
+    margin: var(--space-7) 0;
+  }
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-auto-rows: 130px;
+    grid-auto-flow: dense;
+    gap: var(--space-2);
+  }
+  @media (min-width: 720px) {
+    .grid {
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-auto-rows: 200px;
+      gap: var(--space-3);
+    }
+  }
+  .tile.portrait {
+    grid-row: span 2;
+  }
+  .tile a {
+    position: relative;
+    display: block;
+    height: 100%;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--color-surface-raised);
+  }
+  .tile :global(picture),
+  .tile :global(img) {
+    width: 100%;
+    height: 100%;
+  }
+  .tile :global(img) {
+    object-fit: cover;
+    transition:
+      transform 0.6s ease,
+      filter 0.6s ease;
+    filter: saturate(0.92);
+  }
+  .tile a:hover :global(img),
+  .tile a:focus-visible :global(img) {
+    transform: scale(1.03);
+    filter: saturate(1);
+  }
+  .label {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: var(--space-5) var(--space-3) var(--space-2);
+    background: linear-gradient(transparent, rgb(8 11 19 / 0.75));
+    color: var(--color-ink);
+    font-size: var(--text-sm);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .tile a:hover .label,
+  .tile a:focus-visible .label {
+    opacity: 1;
+  }
+  @media (hover: none) {
+    .label {
+      opacity: 1;
+      font-size: var(--text-xs);
+    }
+  }
+
+  dialog {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgb(6 9 16 / 0.96);
+    color: var(--color-ink);
+  }
+  dialog[open] {
+    display: grid;
+    grid-template-rows: 1fr auto;
+  }
+  dialog::backdrop {
+    background: rgb(0 0 0 / 0.6);
+  }
+  .lb-frame {
+    display: grid;
+    place-items: center;
+    min-height: 0;
+    padding: var(--space-6) var(--space-3) 0;
+  }
+  .lb-frame :global(picture) {
+    max-height: 100%;
+    display: contents;
+  }
+  .lb-frame :global(img) {
+    max-width: 100%;
+    max-height: calc(100dvh - 140px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+  }
+  .lb-caption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-2) var(--space-4);
+    padding: var(--space-3) var(--gutter) var(--space-4);
+  }
+  .lb-title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    margin-right: var(--space-3);
+  }
+  .lb-meta {
+    color: var(--color-ink-muted);
+    font-size: var(--text-sm);
+  }
+  .lb-btn {
+    position: absolute;
+    background: rgb(14 19 32 / 0.6);
+    color: var(--color-ink);
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .lb-close {
+    top: var(--space-3);
+    right: var(--space-3);
+  }
+  .lb-prev,
+  .lb-next {
+    top: 45%;
+  }
+  .lb-prev {
+    left: var(--space-3);
+  }
+  .lb-next {
+    right: var(--space-3);
+  }
+</style>

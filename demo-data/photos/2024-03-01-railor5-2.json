@@ -1,0 +1,26 @@
+{
+  "id": "2024-03-01-railor5-2",
+  "sightingId": "demo-03-railor5",
+  "takenAt": "2024-03-01T07:30:00",
+  "plumage": {
+    "primary": "blue",
+    "secondary": "orange"
+  },
+  "isNest": false,
+  "alt": "Demo placeholder: lorikeet pair",
+  "image": {
+    "key": "demo-images/2024-03-01-railor5-2",
+    "width": 1600,
+    "height": 2000,
+    "widths": [480, 960, 1600],
+    "placeholder": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAAAQAwCdASoYAB4APu1ur1ItJiQiqAgBoB2JYgCzgBatm8AA/tJFFsmr9etLc2/wUFbJiJpqNibZZhlA2veG8vG2AAA="
+  },
+  "camera": {
+    "body": "Demo Camera",
+    "lens": "100-400mm",
+    "focalLengthMm": 400,
+    "aperture": 6.3,
+    "shutter": "1/1000",
+    "iso": 800
+  }
+}

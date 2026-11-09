@@ -1,0 +1,32 @@
+{
+  "code": "rabeat1",
+  "scientificName": "Merops ornatus",
+  "commonName": "Rainbow Bee-eater",
+  "family": "Meropidae",
+  "familyCommonName": "Bee-eaters",
+  "taxonOrder": 9896,
+  "indigenousNames": [],
+  "sensitive": false,
+  "naturalHistory": {
+    "habitat": ["grassland", "woodland", "coastal"],
+    "diet": ["insects"],
+    "nestType": "burrow",
+    "lengthCm": [19, 21],
+    "clutch": [3, 7],
+    "iucn": "LC",
+    "migration": "partial migrant",
+    "range": "Australia; southern birds winter in the north and New Guinea.",
+    "flavour": "Beats bees against a branch to remove the sting before swallowing.",
+    "reviewed": true
+  },
+  "sources": [
+    {
+      "title": "Wikipedia: Rainbow bee-eater",
+      "url": "https://en.wikipedia.org/wiki/Rainbow_bee-eater"
+    },
+    {
+      "title": "eBird/Clements taxonomy",
+      "url": "https://www.birds.cornell.edu/clementschecklist/"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+/* Design tokens: the only place colours, fonts and spaces are defined.
+   Named by role, not hue. The theme is early dawn: still mostly night, with
+   first light only in a thin band at the horizon. Dark is the default. */
+
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --color-surface: #0e1320; /* pre-dawn indigo-black */
+  --color-surface-raised: #171f31; /* slate night */
+  --color-surface-sunken: #0a0e18;
+  --color-line: #2a3348;
+
+  /* Text */
+  --color-ink: #ebe5da; /* warm mist */
+  --color-ink-muted: #9aa3b5; /* blue-grey haze */
+
+  /* First light */
+  --color-first-light: #e8a27a; /* peach at the horizon: links, active filters */
+  --color-gold: #f1d39c; /* pale gold: focus, highlights */
+  --color-rose: #b97e86; /* dusty rose: secondary accent */
+
+  /* The header sky, top to horizon */
+  --color-sky-top: #0e1320;
+  --color-sky-high: #151c33;
+  --color-sky-mid: #2a2744;
+  --color-sky-low: #5b3f57;
+  --color-sky-rose: #9a6371;
+  --color-sky-glow: #e3a07c;
+  --color-sky-horizon: #f1d39c;
+  --color-treeline: #080b13;
+
+  /* Species Card stock: cream card on a dark table */
+  --color-card: #f2ead9;
+  --color-card-edge: #d9ccb0;
+  --color-card-ink: #2b2a26;
+  --color-card-ink-muted: #6b6558;
+  --color-card-band: #e6dbc3;
+  --color-card-accent: #8a5a44;
+
+  --color-demo: #b97e86;
+
+  /* Type */
+  --font-display: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'Source Sans 3 Variable', 'Source Sans 3', system-ui, sans-serif;
+  --font-hand: 'Caveat', 'Bradley Hand', cursive;
+
+  --text-xs: 0.78rem;
+  --text-sm: 0.88rem;
+  --text-md: 1rem;
+  --text-lg: 1.2rem;
+  --text-xl: 1.6rem;
+  --text-2xl: clamp(2rem, 1.4rem + 2.6vw, 3.2rem);
+
+  /* Space */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --gutter: 16px;
+
+  /* Shape */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-card: 14px;
+  --page-width: 1200px;
+  --shadow-card:
+    0 1px 0 rgb(255 255 255 / 0.4) inset, 0 10px 30px rgb(0 0 0 / 0.45);
+}
+
+@media (min-width: 720px) {
+  :root {
+    --gutter: 32px;
+  }
+}
+
+/* Plumage Color swatches */
+:root {
+  --plumage-red: #c0392b;
+  --plumage-orange: #e67e22;
+  --plumage-yellow: #f1c40f;
+  --plumage-green: #3f9b54;
+  --plumage-blue: #3a6fc4;
+  --plumage-brown: #8b6b4a;
+  --plumage-black: #111111;
+  --plumage-white: #f4f4f4;
+  --plumage-grey: #8e939b;
+  --plumage-pink: #e59ab4;
+}

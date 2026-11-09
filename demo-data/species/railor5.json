@@ -1,0 +1,33 @@
+{
+  "code": "railor5",
+  "scientificName": "Trichoglossus moluccanus",
+  "commonName": "Rainbow Lorikeet",
+  "family": "Psittaculidae",
+  "familyCommonName": "Old World Parrots",
+  "taxonOrder": 12762,
+  "indigenousNames": [],
+  "sensitive": false,
+  "naturalHistory": {
+    "habitat": ["woodland", "urban", "coastal"],
+    "diet": ["nectar", "fruit"],
+    "nestType": "hollow",
+    "wingspanCm": [42, 46],
+    "lengthCm": [25, 30],
+    "clutch": [2, 3],
+    "iucn": "LC",
+    "migration": "nomadic",
+    "range": "Coastal northern and eastern Australia.",
+    "flavour": "A brush-tipped tongue mops up nectar and pollen.",
+    "reviewed": true
+  },
+  "sources": [
+    {
+      "title": "Wikipedia: Rainbow lorikeet",
+      "url": "https://en.wikipedia.org/wiki/Rainbow_lorikeet"
+    },
+    {
+      "title": "eBird/Clements taxonomy",
+      "url": "https://www.birds.cornell.edu/clementschecklist/"
+    }
+  ]
+}

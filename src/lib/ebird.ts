@@ -1,5 +1,5 @@
 import { parse } from 'csv-parse/sync';
-import type { ExactLocation, Sighting, Species } from './types';
+import type { ExactLocation, Sighting, Species } from './types.ts';
 
 /** One row of Tim's eBird "Download My Data" export, ready to become an eBird Sighting. */
 export type ImportedSighting = Pick<

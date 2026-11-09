@@ -1,0 +1,32 @@
+{
+  "code": "supfai1",
+  "scientificName": "Malurus cyaneus",
+  "commonName": "Superb Fairywren",
+  "family": "Maluridae",
+  "familyCommonName": "Fairywrens",
+  "taxonOrder": 17765,
+  "indigenousNames": [],
+  "sensitive": false,
+  "naturalHistory": {
+    "habitat": ["woodland", "urban"],
+    "diet": ["insects"],
+    "nestType": "dome",
+    "lengthCm": [14, 14],
+    "clutch": [3, 4],
+    "iucn": "LC",
+    "migration": "resident",
+    "range": "South-eastern Australia and Tasmania.",
+    "flavour": "Males pluck yellow petals and carry them to females in courtship.",
+    "reviewed": true
+  },
+  "sources": [
+    {
+      "title": "Wikipedia: Superb fairywren",
+      "url": "https://en.wikipedia.org/wiki/Superb_fairywren"
+    },
+    {
+      "title": "eBird/Clements taxonomy",
+      "url": "https://www.birds.cornell.edu/clementschecklist/"
+    }
+  ]
+}

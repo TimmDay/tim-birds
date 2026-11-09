@@ -1,4 +1,4 @@
-import type { ExactLocation, PublishedLocation } from './types';
+import type { ExactLocation, PublishedLocation } from './types.ts';
 
 /** Half the diagonal of a 0.1° cell is about 7.9 km at the equator; 10 km is a safe upper bound. */
 const ROUNDED_UNCERTAINTY_M = 10000;

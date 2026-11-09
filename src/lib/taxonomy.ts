@@ -1,5 +1,5 @@
 import { parse } from 'csv-parse/sync';
-import type { Species, SpeciesCode } from './types';
+import type { Species, SpeciesCode } from './types.ts';
 
 type TaxonRow = {
   SCIENTIFIC_NAME: string;

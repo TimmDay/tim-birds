@@ -1,0 +1,32 @@
+{
+  "code": "tui1",
+  "scientificName": "Prosthemadera novaeseelandiae",
+  "commonName": "Tui",
+  "family": "Meliphagidae",
+  "familyCommonName": "Honeyeaters",
+  "taxonOrder": 17822,
+  "indigenousNames": [],
+  "sensitive": false,
+  "naturalHistory": {
+    "habitat": ["forest", "urban"],
+    "diet": ["nectar", "fruit", "insects"],
+    "nestType": "cup",
+    "lengthCm": [27, 32],
+    "clutch": [2, 4],
+    "iucn": "LC",
+    "migration": "resident",
+    "range": "Throughout New Zealand.",
+    "flavour": "Has two voice boxes, so it can sing two notes at once.",
+    "reviewed": true
+  },
+  "sources": [
+    {
+      "title": "Wikipedia: Tui (bird)",
+      "url": "https://en.wikipedia.org/wiki/Tui_(bird)"
+    },
+    {
+      "title": "eBird/Clements taxonomy",
+      "url": "https://www.birds.cornell.edu/clementschecklist/"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "code": "ausmag2",
+  "scientificName": "Gymnorhina tibicen",
+  "commonName": "Australian Magpie",
+  "family": "Artamidae",
+  "familyCommonName": "Woodswallows, Bellmagpies, and Allies",
+  "taxonOrder": 19890,
+  "nickname": "Swoopy",
+  "indigenousNames": [
+    {
+      "name": "Lorem ipsum",
+      "language": "Placeholder language",
+      "source": "Demo only: replace with a cited source"
+    }
+  ],
+  "sensitive": false,
+  "naturalHistory": {
+    "habitat": ["grassland", "woodland", "urban"],
+    "diet": ["insects", "other invertebrates"],
+    "nestType": "cup",
+    "wingspanCm": [65, 85],
+    "lengthCm": [37, 43],
+    "clutch": [2, 5],
+    "iucn": "LC",
+    "migration": "resident",
+    "range": "Most of Australia and southern New Guinea.",
+    "flavour": "Can mimic more than 35 other species.",
+    "reviewed": true
+  },
+  "sources": [
+    {
+      "title": "Wikipedia: Australian magpie",
+      "url": "https://en.wikipedia.org/wiki/Australian_magpie"
+    },
+    {
+      "title": "eBird/Clements taxonomy",
+      "url": "https://www.birds.cornell.edu/clementschecklist/"
+    }
+  ]
+}

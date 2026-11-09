@@ -1,5 +1,5 @@
-import { withheldLocation } from './location';
-import type { Sighting, SpeciesCode } from './types';
+import { withheldLocation } from './location.ts';
+import type { Sighting, SpeciesCode } from './types.ts';
 
 const byDateThenId = (a: Sighting, b: Sighting) =>
   a.eventDate.localeCompare(b.eventDate) || a.id.localeCompare(b.id);

@@ -1,0 +1,26 @@
+{
+  "id": "2024-10-20-supfai1-1",
+  "sightingId": "demo-04-supfai1",
+  "takenAt": "2024-10-20T08:05:00",
+  "plumage": {
+    "primary": "blue",
+    "secondary": "black"
+  },
+  "isNest": false,
+  "alt": "Demo placeholder: male fairywren in breeding plumage",
+  "image": {
+    "key": "demo-images/2024-10-20-supfai1-1",
+    "width": 2400,
+    "height": 1600,
+    "widths": [480, 960, 1600, 2400],
+    "placeholder": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAAAQAwCdASoYABAAPu1iqU2zpaOmMAgCcB2JYgCdMoAEhwAA/u1mZtmSJ1ZrKKbvszJnJT8TQwcAAA=="
+  },
+  "camera": {
+    "body": "Demo Camera",
+    "lens": "100-400mm",
+    "focalLengthMm": 400,
+    "aperture": 6.3,
+    "shutter": "1/1000",
+    "iso": 800
+  }
+}

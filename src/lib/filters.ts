@@ -1,4 +1,8 @@
-import { PLUMAGE_COLORS, type PlumageColor, type SpeciesCode } from './types';
+import {
+  PLUMAGE_COLORS,
+  type PlumageColor,
+  type SpeciesCode,
+} from './types.ts';
 
 /** A Photo joined with what the gallery filters on (Species, place and time come from its Sighting). */
 export type GalleryPhoto = {

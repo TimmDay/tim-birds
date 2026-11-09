@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createTaxonomy } from './taxonomy';
+import { createTaxonomy } from './taxonomy.ts';
 
 const csv = `SCIENTIFIC_NAME,COMMON_NAME,SPECIES_CODE,CATEGORY,TAXON_ORDER,FAMILY_COM_NAME,FAMILY_SCI_NAME,REPORT_AS
 Gallus gallus,Red Junglefowl,redjun,species,1642.0,"Pheasants, Grouse, and Allies",Phasianidae,

@@ -1,0 +1,26 @@
+{
+  "id": "2024-03-01-railor5-1",
+  "sightingId": "demo-03-railor5",
+  "takenAt": "2024-03-01T07:30:00",
+  "plumage": {
+    "primary": "green",
+    "secondary": "blue"
+  },
+  "isNest": false,
+  "alt": "Demo placeholder: lorikeet in blossom",
+  "image": {
+    "key": "demo-images/2024-03-01-railor5-1",
+    "width": 2400,
+    "height": 1600,
+    "widths": [480, 960, 1600, 2400],
+    "placeholder": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAAAQAwCdASoYABAAPu1iqU2tJaQiMAgBoB2JZgCdMoAEhwAA/tWshaWP8OyNNvkLI8d5+nldD9gAAA=="
+  },
+  "camera": {
+    "body": "Demo Camera",
+    "lens": "100-400mm",
+    "focalLengthMm": 400,
+    "aperture": 6.3,
+    "shutter": "1/1000",
+    "iso": 800
+  }
+}

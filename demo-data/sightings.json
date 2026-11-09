@@ -1,0 +1,210 @@
+[
+  {
+    "id": "demo-01-laukoo1",
+    "origin": "photo",
+    "speciesCode": "laukoo1",
+    "eventDate": "2025-09-14",
+    "eventTime": "06:45",
+    "countryCode": "AU",
+    "stateProvince": "AU-QLD",
+    "individualCount": 1,
+    "sensitive": false,
+    "location": {
+      "decimalLatitude": -28.2,
+      "decimalLongitude": 153.1,
+      "coordinateUncertaintyInMeters": 10000,
+      "locality": "O'Reilly's, Lamington NP",
+      "dataGeneralizations": "Coordinates rounded to 0.1 degrees."
+    }
+  },
+  {
+    "id": "demo-02-laukoo1",
+    "origin": "photo",
+    "speciesCode": "laukoo1",
+    "eventDate": "2023-04-02",
+    "eventTime": "07:10",
+    "countryCode": "AU",
+    "stateProvince": "AU-NSW",
+    "individualCount": 1,
+    "sensitive": false,
+    "location": {
+      "decimalLatitude": -33.9,
+      "decimalLongitude": 151.2,
+      "coordinateUncertaintyInMeters": 10000,
+      "locality": "Centennial Park",
+      "dataGeneralizations": "Coordinates rounded to 0.1 degrees."
+    }
+  },
+  {
+    "id": "demo-03-railor5",
+    "origin": "photo",
+    "speciesCode": "railor5",
+    "eventDate": "2024-03-01",
+    "eventTime": "07:30",
+    "countryCode": "AU",
+    "stateProvince": "AU-NSW",
+    "individualCount": 1,
+    "sensitive": false,
+    "location": {
+      "decimalLatitude": -33.9,
+      "decimalLongitude": 151.2,
+      "coordinateUncertaintyInMeters": 10000,
+      "locality": "Royal Botanic Garden",
+      "dataGeneralizations": "Coordinates rounded to 0.1 degrees."
+    }
+  },
+  {
+    "id": "demo-04-supfai1",
+    "origin": "photo",
+    "speciesCode": "supfai1",
+    "eventDate": "2024-10-20",
+    "eventTime": "08:05",
+    "countryCode": "AU",
+    "stateProvince": "AU-VIC",
+    "individualCount": 1,
+    "sensitive": false,
+    "location": {
+      "decimalLatitude": -37.8,
+      "decimalLongitude": 145,
+      "coordinateUncertaintyInMeters": 10000,
+      "locality": "Royal Park",
+      "dataGeneralizations": "Coordinates rounded to 0.1 degrees."
+    }
+  },
+  {
+    "id": "demo-05-supfai1",
+    "origin": "photo",
+    "speciesCode": "supfai1",
+    "eventDate": "2025-05-11",
+    "eventTime": "09:20",
+    "countryCode": "AU",
+    "stateProvince": "AU-VIC",
+    "individualCount": 1,
+    "sensitive": false,
+    "location": {
+      "decimalLatitude": -37.8,
+      "decimalLongitude": 145,
+      "coordinateUncertaintyInMeters": 10000,
+      "locality": "Gardiners Creek",
+      "dataGeneralizations": "Coordinates rounded to 0.1 degrees."
+    }
+  },
+  {
+    "id": "demo-06-ausmag2",
+    "origin": "photo",
+    "speciesCode": "ausmag2",
+    "eventDate": "2023-08-30",
+    "eventTime": "16:40",
+    "countryCode": "AU",
+    "stateProvince": "AU-ACT",
+    "individualCount": 1,
+    "sensitive": false,
+    "location": {
+      "decimalLatitude": -35.3,
+      "decimalLongitude": 149.1,
+      "coordinateUncertaintyInMeters": 10000,
+      "locality": "Commonwealth Park",
+      "dataGeneralizations": "Coordinates rounded to 0.1 degrees."
+    }
+  },
+  {
+    "id": "demo-07-succoc",
+    "origin": "photo",
+    "speciesCode": "succoc",
+    "eventDate": "2025-01-18",
+    "eventTime": "17:55",
+    "countryCode": "AU",
+    "stateProvince": "AU-NSW",
+    "individualCount": 1,
+    "sensitive": false,
+    "location": {
+      "decimalLatitude": -33.8,
+      "decimalLongitude": 151.3,
+      "coordinateUncertaintyInMeters": 10000,
+      "locality": "Manly",
+      "dataGeneralizations": "Coordinates rounded to 0.1 degrees."
+    }
+  },
+  {
+    "id": "demo-08-tawfro1",
+    "origin": "photo",
+    "speciesCode": "tawfro1",
+    "eventDate": "2024-09-03",
+    "eventTime": "18:20",
+    "countryCode": "AU",
+    "stateProvince": "AU-QLD",
+    "individualCount": 1,
+    "sensitive": true,
+    "location": {
+      "dataGeneralizations": "Coordinates and locality withheld (sensitive species or nest). Country and state only."
+    }
+  },
+  {
+    "id": "demo-09-powowl1",
+    "origin": "photo",
+    "speciesCode": "powowl1",
+    "eventDate": "2025-06-22",
+    "eventTime": "17:30",
+    "countryCode": "AU",
+    "stateProvince": "AU-NSW",
+    "individualCount": 1,
+    "sensitive": true,
+    "location": {
+      "dataGeneralizations": "Coordinates and locality withheld (sensitive species or nest). Country and state only."
+    }
+  },
+  {
+    "id": "demo-10-rabeat1",
+    "origin": "photo",
+    "speciesCode": "rabeat1",
+    "eventDate": "2025-10-04",
+    "eventTime": "07:00",
+    "countryCode": "AU",
+    "stateProvince": "AU-NT",
+    "individualCount": 1,
+    "sensitive": false,
+    "location": {
+      "decimalLatitude": -12.9,
+      "decimalLongitude": 132.6,
+      "coordinateUncertaintyInMeters": 10000,
+      "locality": "Yellow Water, Kakadu NP",
+      "dataGeneralizations": "Coordinates rounded to 0.1 degrees."
+    }
+  },
+  {
+    "id": "demo-11-criros2",
+    "origin": "photo",
+    "speciesCode": "criros2",
+    "eventDate": "2022-12-28",
+    "eventTime": "10:15",
+    "countryCode": "AU",
+    "stateProvince": "AU-VIC",
+    "individualCount": 1,
+    "sensitive": false,
+    "location": {
+      "decimalLatitude": -37.9,
+      "decimalLongitude": 145.4,
+      "coordinateUncertaintyInMeters": 10000,
+      "locality": "Dandenong Ranges",
+      "dataGeneralizations": "Coordinates rounded to 0.1 degrees."
+    }
+  },
+  {
+    "id": "demo-12-tui1",
+    "origin": "photo",
+    "speciesCode": "tui1",
+    "eventDate": "2023-11-01",
+    "eventTime": "08:30",
+    "countryCode": "NZ",
+    "stateProvince": "NZ-WGN",
+    "individualCount": 1,
+    "sensitive": false,
+    "location": {
+      "decimalLatitude": -41.3,
+      "decimalLongitude": 174.8,
+      "coordinateUncertaintyInMeters": 10000,
+      "locality": "Zealandia",
+      "dataGeneralizations": "Coordinates rounded to 0.1 degrees."
+    }
+  }
+]

@@ -16,3 +16,4 @@ inbox/
 # Test output
 test-results/
 playwright-report/
+public/demo-images/

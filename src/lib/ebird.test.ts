@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { parseEbirdExport } from './ebird';
-import { createTaxonomy } from './taxonomy';
+import { parseEbirdExport } from './ebird.ts';
+import { createTaxonomy } from './taxonomy.ts';
 
 const HEADER =
   'Submission ID,Common Name,Scientific Name,Taxonomic Order,Count,State/Province,County,Location ID,Location,Latitude,Longitude,Date,Time,Protocol,Duration (Min),All Obs Reported,Distance Traveled (km),Area Covered (ha),Number of Observers,Breeding Code,Observation Details,Checklist Comments,ML Catalog Numbers';

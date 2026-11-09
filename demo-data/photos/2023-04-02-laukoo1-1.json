@@ -1,0 +1,26 @@
+{
+  "id": "2023-04-02-laukoo1-1",
+  "sightingId": "demo-02-laukoo1",
+  "takenAt": "2023-04-02T07:10:00",
+  "plumage": {
+    "primary": "brown",
+    "secondary": "white"
+  },
+  "isNest": false,
+  "alt": "Demo placeholder: kookaburra calling",
+  "image": {
+    "key": "demo-images/2023-04-02-laukoo1-1",
+    "width": 1600,
+    "height": 2000,
+    "widths": [480, 960, 1600],
+    "placeholder": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAAAwBACdASoYAB4APu1srVEppiQ5KAqrIB2JZwDImBELM6/LxEZ11e5A7oAA/sO/zUeXfSHCVMvG75ji7438Fn70VNvsxI7IcPmAAA=="
+  },
+  "camera": {
+    "body": "Demo Camera",
+    "lens": "100-400mm",
+    "focalLengthMm": 400,
+    "aperture": 6.3,
+    "shutter": "1/1000",
+    "iso": 800
+  }
+}

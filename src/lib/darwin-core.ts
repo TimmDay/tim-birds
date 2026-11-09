@@ -1,6 +1,6 @@
-import { withheldLocation } from './location';
-import { countryName, stateName } from './regions';
-import type { Photo, Sighting, Species, SpeciesCode } from './types';
+import { withheldLocation } from './location.ts';
+import { countryName, stateName } from './regions.ts';
+import type { Photo, Sighting, Species, SpeciesCode } from './types.ts';
 
 export const PHOTO_LICENSE =
   'http://creativecommons.org/licenses/by-nc/4.0/legalcode';

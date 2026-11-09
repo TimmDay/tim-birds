@@ -1,4 +1,4 @@
-import type { Sighting, Species, SpeciesCode } from './types';
+import type { Sighting, Species, SpeciesCode } from './types.ts';
 
 export type LifeListEntry = {
   speciesCode: SpeciesCode;

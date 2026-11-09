@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { findMatchingSightings, mergeSightings } from './sightings';
-import type { Sighting } from './types';
+import { findMatchingSightings, mergeSightings } from './sightings.ts';
+import type { Sighting } from './types.ts';
 
 const base = {
   countryCode: 'AU',
