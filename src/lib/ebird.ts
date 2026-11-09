@@ -16,13 +16,6 @@ export type ImportedSighting = Pick<
 
 type Row = Record<string, string>;
 
-/** "Gymnorhina tibicen [tibicen Group]" → "Gymnorhina tibicen". Spuhs, slashes and hybrids return undefined. */
-function binomial(scientificName: string): string | undefined {
-  if (/\bsp\.|\/|\sx\s/.test(scientificName)) return undefined;
-  const [genus, epithet] = scientificName.trim().split(/\s+/);
-  return genus && epithet ? `${genus} ${epithet}` : undefined;
-}
-
 /** "05:10 PM" → "17:10". */
 function to24h(time: string): string | undefined {
   const m = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(time.trim());
@@ -33,12 +26,12 @@ function to24h(time: string): string | undefined {
 }
 
 /**
- * Parses an eBird export. `resolveSpecies` maps a binomial to its eBird/Clements
- * Species; rows it cannot resolve (not a Species) are dropped.
+ * Parses an eBird export. `resolveSpecies` maps an eBird scientific name to the
+ * Species it counts as (see taxonomy.ts); rows that are not a Species are dropped.
  */
 export function parseEbirdExport(
   csv: string,
-  resolveSpecies: (binomial: string) => Species | undefined,
+  resolveSpecies: (scientificName: string) => Species | undefined,
 ): ImportedSighting[] {
   const rows: Row[] = parse(csv, {
     columns: true,
@@ -47,8 +40,7 @@ export function parseEbirdExport(
   });
   const out: ImportedSighting[] = [];
   for (const row of rows) {
-    const name = binomial(row['Scientific Name'] ?? '');
-    const species = name ? resolveSpecies(name) : undefined;
+    const species = resolveSpecies(row['Scientific Name'] ?? '');
     if (!species) continue;
 
     const checklist = row['Submission ID'] ?? '';
