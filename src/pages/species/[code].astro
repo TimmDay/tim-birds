@@ -1,0 +1,149 @@
+---
+import Base from '../../layouts/Base.astro';
+import Picture from '../../components/Picture.astro';
+import SpeciesCard from '../../components/SpeciesCard.astro';
+import {
+  getData,
+  photosOf,
+  type CardData,
+  type PhotoView,
+} from '../../lib/data.ts';
+import { formatDate } from '../../lib/format.ts';
+import { countryName, stateName } from '../../lib/regions.ts';
+
+export async function getStaticPaths() {
+  const { cards, photos, sightings } = await getData();
+  return cards.map((card) => ({
+    params: { code: card.species.code },
+    props: {
+      card,
+      photos: photosOf(photos, card.species.code),
+      sightings: sightings
+        .filter((s) => s.speciesCode === card.species.code)
+        .sort((a, b) => b.eventDate.localeCompare(a.eventDate)),
+    },
+  }));
+}
+
+type Props = {
+  card: CardData;
+  photos: PhotoView[];
+  sightings: Awaited<ReturnType<typeof getData>>['sightings'];
+};
+const { card, photos, sightings } = Astro.props;
+const sp = card.species;
+const where = (s: Props['sightings'][number]) =>
+  [
+    s.location.locality,
+    s.stateProvince && stateName(s.stateProvince),
+    countryName(s.countryCode),
+  ]
+    .filter(Boolean)
+    .join(', ');
+---
+
+<Base
+  title={sp.commonName}
+  description={`${sp.commonName} (${sp.scientificName}) on Tim's Life List.`}
+>
+  <div class="layout">
+    <div class="card-col">
+      <SpeciesCard card={card} linked={false} headingLevel="h1" />
+    </div>
+    <div>
+      <h2>Photos</h2>
+      {photos.length ? (
+        <ul class="photos">
+          {photos.map((p) => (
+            <li>
+              <a href={`/photos/${p.id}/`}>
+                <Picture
+                  image={p.image}
+                  alt={p.alt}
+                  sizes="(max-width: 719px) 50vw, 300px"
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="muted">No Photos yet.</p>
+      )}
+
+      <h2>Sightings</h2>
+      <ul class="sightings">
+        {sightings.map((s) => (
+          <li>
+            <span class="date">{formatDate(s.eventDate)}</span>{' '}
+            <span class="muted">{where(s)}</span>
+            {s.sensitive && <span class="tag">location withheld</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+  <p class="back">
+    <a href="/species/">← All species</a>
+  </p>
+</Base>
+
+<style>
+  .layout {
+    display: grid;
+    gap: var(--space-6);
+  }
+  @media (min-width: 900px) {
+    .layout {
+      grid-template-columns: minmax(320px, 400px) 1fr;
+      align-items: start;
+    }
+    .card-col {
+      position: sticky;
+      top: var(--space-4);
+    }
+  }
+  .card-col :global(.name) {
+    font-size: 1.8rem;
+  }
+  .photos {
+    list-style: none;
+    margin: 0 0 var(--space-6);
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-2);
+  }
+  .photos a {
+    display: block;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+  }
+  .photos :global(picture),
+  .photos :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .sightings {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .sightings li {
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .muted {
+    color: var(--color-ink-muted);
+  }
+  .tag {
+    font-size: var(--text-xs);
+    color: var(--color-rose);
+    margin-left: var(--space-2);
+  }
+  .back {
+    margin-top: var(--space-6);
+  }
+</style>

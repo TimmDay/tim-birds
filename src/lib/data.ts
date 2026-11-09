@@ -16,6 +16,17 @@ export type PhotoView = PhotoEntry & {
   species: SpeciesEntry;
 };
 
+/** Everything a Species Card shows, for one Life List Species. */
+export type CardData = {
+  speciesCode: string;
+  firstSeen: string;
+  lastSeen: string;
+  sightingCount: number;
+  species: SpeciesEntry;
+  bestPhoto: PhotoView | undefined;
+  photoCount: number;
+};
+
 let cache: Promise<Awaited<ReturnType<typeof load>>> | undefined;
 
 async function load() {
@@ -61,7 +72,23 @@ async function load() {
       throw new Error(`Sighting ${s.id}: no Species ${s.speciesCode}`);
   }
 
-  return { species, sightings, photos, lifeList: lifeList(sightings, species) };
+  const lastSeen = new Map<string, string>();
+  for (const s of sightings) {
+    if ((lastSeen.get(s.speciesCode) ?? '') < s.eventDate)
+      lastSeen.set(s.speciesCode, s.eventDate);
+  }
+  const cards: CardData[] = lifeList(sightings, species).map((entry) => {
+    const sp = species[entry.speciesCode]!;
+    return {
+      ...entry,
+      lastSeen: lastSeen.get(sp.code) ?? entry.firstSeen,
+      species: sp,
+      bestPhoto: bestPhotoOf(photos, sp),
+      photoCount: photosOf(photos, sp.code).length,
+    };
+  });
+
+  return { species, sightings, photos, cards };
 }
 
 export const getData = () => (cache ??= load());
