@@ -39,4 +39,9 @@ describe('createTaxonomy', () => {
   it('looks a Species up by code', () => {
     expect(taxonomy.byCode('redjun')?.commonName).toBe('Red Junglefowl');
   });
+
+  it('knows names it will not count, so only truly unknown names get reported', () => {
+    expect(taxonomy.knows('Anatidae sp.')).toBe(true);
+    expect(taxonomy.knows('Avis imaginaria')).toBe(false);
+  });
 });

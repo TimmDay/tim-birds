@@ -1,6 +1,12 @@
 // Builds the Darwin Core Archive from the site's data. Build time only.
 import { strToU8, zipSync } from 'fflate';
-import { IMAGE_BASE, PHOTOGRAPHER, SITE_NAME, SITE_URL } from '../config.ts';
+import {
+  DEMO,
+  IMAGE_BASE,
+  PHOTOGRAPHER,
+  SITE_NAME,
+  SITE_URL,
+} from '../config.ts';
 import { getData } from './data.ts';
 import {
   MULTIMEDIA_TERMS,
@@ -36,7 +42,9 @@ export async function buildArchive(): Promise<Uint8Array> {
     'meta.xml': strToU8(metaXml()),
     'eml.xml': strToU8(
       emlXml({
-        title: `${SITE_NAME}: ${PHOTOGRAPHER}'s bird Sightings and Photos`,
+        title: DEMO
+          ? 'DEMO DATA: placeholder records, not real observations'
+          : `${SITE_NAME}: ${PHOTOGRAPHER}'s bird Sightings and Photos`,
         creator: PHOTOGRAPHER,
         abstract:
           'Personal bird observations (eBird checklists and photo-only Sightings) with photographs. Coordinates are rounded to 0.1 degrees; Sensitive Sightings publish country and state only.',

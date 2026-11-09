@@ -15,6 +15,11 @@ The checklist for getting Photos onto the site. Words in **bold** are defined in
   - Safe to re-run: it updates **Sightings** rather than duplicating them.
   - Check the Life List count it prints against your eBird life list total.
   - If it offers to move Photos from a **Photo Sighting** to a new eBird checklist, say yes unless they are different outings.
+  - **Read the list of Places it prints.** These are your eBird location names and will be public. Rename or hide personal ones ("Home", a street address) in `private/place-overrides.json`, then run the import again:
+    ```json
+    { "Home": null, "12 Smith St, Ashgrove": "Ashgrove" }
+    ```
+  - If it lists scientific names it doesn't know, the vendored taxonomy may be out of date. Ask Claude to refresh `scripts/data/ebird-taxonomy.csv`.
 
 ## For each batch of Photos
 
