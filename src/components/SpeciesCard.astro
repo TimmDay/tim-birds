@@ -1,0 +1,456 @@
+---
+// A Species Card: the feel of a board-game bird card, with our own layout,
+// icons and words. Cream card stock on the dark page.
+import Info from '@lucide/astro/icons/info';
+import Picture from './Picture.astro';
+import {
+  DIET_ICON,
+  Egg,
+  HABITAT_ICON,
+  MIGRATION_ICON,
+  MoveHorizontal,
+  NEST_ICON,
+  Ruler,
+} from './icons.ts';
+import type { CardData } from '../lib/data.ts';
+import { formatDate } from '../lib/format.ts';
+
+type Props = {
+  card: CardData;
+  linked?: boolean;
+  headingLevel?: 'h1' | 'h2' | 'h3';
+};
+const { card, linked = true, headingLevel = 'h2' } = Astro.props;
+const { species: sp, bestPhoto } = card;
+const nh = sp.naturalHistory;
+const Heading = headingLevel;
+const span = (r?: [number, number], unit = '') =>
+  r ? (r[0] === r[1] ? `${r[0]}${unit}` : `${r[0]}–${r[1]}${unit}`) : undefined;
+const IUCN: Record<string, string> = {
+  LC: 'Least Concern',
+  NT: 'Near Threatened',
+  VU: 'Vulnerable',
+  EN: 'Endangered',
+  CR: 'Critically Endangered',
+  EW: 'Extinct in the Wild',
+  EX: 'Extinct',
+  DD: 'Data Deficient',
+  NE: 'Not Evaluated',
+};
+const sourcesId = `sources-${sp.code}`;
+---
+
+<article class="card" data-card>
+  <header class="band">
+    <Heading class="name">
+      {linked ? (
+        <a href={`/species/${sp.code}/`}>{sp.commonName}</a>
+      ) : (
+        sp.commonName
+      )}
+    </Heading>
+    <p class="sci">
+      <i>{sp.scientificName}</i>
+    </p>
+    {sp.nickname && <p class="nickname">“{sp.nickname}”</p>}
+  </header>
+
+  <div class="body">
+    <ul class="rail" aria-label="Habitat, diet and nest">
+      {nh?.habitat.map((h) => {
+        const Icon = HABITAT_ICON[h];
+        return (
+          <li class="habitat" title={`Habitat: ${h}`}>
+            <Icon size={18} aria-hidden="true" />
+            <span class="visually-hidden">Habitat: {h}</span>
+          </li>
+        );
+      })}
+      {nh?.diet.map((d) => {
+        const Icon = DIET_ICON[d];
+        return (
+          <li class="diet" title={`Diet: ${d}`}>
+            <Icon size={18} aria-hidden="true" />
+            <span class="visually-hidden">Diet: {d}</span>
+          </li>
+        );
+      })}
+      {nh &&
+        (() => {
+          const Icon = NEST_ICON[nh.nestType];
+          return (
+            <li class="nest" title={`Nest: ${nh.nestType}`}>
+              <Icon size={18} aria-hidden="true" />
+              <span class="visually-hidden">Nest: {nh.nestType}</span>
+            </li>
+          );
+        })()}
+      {nh?.migration &&
+        (() => {
+          const Icon = MIGRATION_ICON[nh.migration];
+          return (
+            <li class="migration" title={`Movement: ${nh.migration}`}>
+              <Icon size={18} aria-hidden="true" />
+              <span class="visually-hidden">Movement: {nh.migration}</span>
+            </li>
+          );
+        })()}
+    </ul>
+
+    <div class="window">
+      {bestPhoto ? (
+        <a href={`/photos/${bestPhoto.id}/`} tabindex="-1" aria-hidden="true">
+          <Picture
+            image={bestPhoto.image}
+            alt=""
+            sizes="(max-width: 719px) 80vw, 320px"
+          />
+        </a>
+      ) : (
+        <div class="unphotographed">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M16 7h.01" />
+            <path d="M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20" />
+            <path d="m20 7 2 .5-2 .5" />
+            <path d="M10 18v3" />
+            <path d="M14 17.75V21" />
+            <path d="M7 18a6 6 0 0 0 3.84-10.61" />
+          </svg>
+          <span>Seen, not yet photographed</span>
+        </div>
+      )}
+    </div>
+  </div>
+
+  {nh && (
+    <dl class="stats">
+      {nh.wingspanCm && (
+        <div>
+          <dt>
+            <MoveHorizontal size={14} aria-hidden="true" /> Wingspan
+          </dt>
+          <dd>{span(nh.wingspanCm, ' cm')}</dd>
+        </div>
+      )}
+      {nh.lengthCm && (
+        <div>
+          <dt>
+            <Ruler size={14} aria-hidden="true" /> Length
+          </dt>
+          <dd>{span(nh.lengthCm, ' cm')}</dd>
+        </div>
+      )}
+      {nh.clutch && (
+        <div>
+          <dt>
+            <Egg size={14} aria-hidden="true" /> Clutch
+          </dt>
+          <dd>{span(nh.clutch)}</dd>
+        </div>
+      )}
+      {nh.iucn && (
+        <div>
+          <dt>IUCN</dt>
+          <dd>
+            <abbr class:list={['iucn', nh.iucn]} title={IUCN[nh.iucn]}>
+              {nh.iucn}
+            </abbr>
+          </dd>
+        </div>
+      )}
+    </dl>
+  )}
+
+  {nh?.range && <p class="range">{nh.range}</p>}
+  {nh?.flavour && <p class="flavour">{nh.flavour}</p>}
+
+  {sp.indigenousNames.length > 0 && (
+    <ul class="indigenous" aria-label="Indigenous names">
+      {sp.indigenousNames.map((n) => (
+        <li>
+          <span class="iname">{n.name}</span>{' '}
+          <span class="lang">{n.language}</span>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <footer class="foot">
+    <p class="seen">
+      First seen {formatDate(card.firstSeen)} ·{' '}
+      {`${card.sightingCount} ${card.sightingCount === 1 ? 'Sighting' : 'Sightings'}`}
+    </p>
+    {nh && !nh.reviewed && <p class="draft">Draft card, not yet reviewed</p>}
+    <button
+      class="info"
+      type="button"
+      popovertarget={sourcesId}
+      aria-label={`Sources for ${sp.commonName}`}
+    >
+      <Info size={16} aria-hidden="true" />
+    </button>
+    <div id={sourcesId} popover class="sources">
+      <p>
+        <strong>Card Sources</strong>
+      </p>
+      <ul>
+        {sp.sources.map((s) => (
+          <li>
+            <a href={s.url} rel="noopener">
+              {s.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </footer>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    background:
+      radial-gradient(
+        120% 80% at 20% 0%,
+        rgb(255 255 255 / 0.35),
+        transparent 60%
+      ),
+      var(--color-card);
+    color: var(--color-card-ink);
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-card-edge);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-3);
+    font-size: var(--text-sm);
+    line-height: 1.4;
+  }
+  .band {
+    background: var(--color-card-band);
+    border-radius: calc(var(--radius-card) - 6px);
+    padding: var(--space-2) var(--space-3);
+  }
+  .name {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-card-ink);
+  }
+  .name a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .name a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-card);
+  }
+  .card:has(.name a:hover) {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+  .sci {
+    margin: 0;
+    color: var(--color-card-ink-muted);
+  }
+  .nickname {
+    margin: 0;
+    font-family: var(--font-hand);
+    font-size: 1.25rem;
+    color: var(--color-card-accent);
+    line-height: 1.1;
+  }
+  .body {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-2);
+  }
+  .rail {
+    list-style: none;
+    margin: 0;
+    padding: var(--space-2) 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: var(--color-card-band);
+    border-radius: 999px;
+    align-items: center;
+  }
+  .rail li {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    color: var(--color-card-ink);
+  }
+  .rail .habitat {
+    background: #d6e0c8;
+  }
+  .rail .diet {
+    background: #ecd9bf;
+  }
+  .rail .nest {
+    background: #e2d3cc;
+  }
+  .rail .migration {
+    background: #d3dbe4;
+  }
+  .window {
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: #d9cfba;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
+  }
+  .window a {
+    position: relative;
+    z-index: 1;
+  }
+  .window :global(picture),
+  .window :global(img),
+  .window a {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .window :global(img) {
+    object-fit: cover;
+  }
+  .unphotographed {
+    height: 100%;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--space-2);
+    color: var(--color-card-ink-muted);
+    font-style: italic;
+  }
+  .unphotographed svg {
+    width: 56px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.6;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: var(--space-1);
+    margin: 0;
+    padding: var(--space-2) 0;
+    border-block: 1px solid var(--color-card-edge);
+  }
+  .stats div {
+    text-align: center;
+  }
+  .stats dt {
+    color: var(--color-card-ink-muted);
+    font-size: var(--text-xs);
+    display: inline-flex;
+    gap: 3px;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .stats dd {
+    margin: 0;
+    font-weight: 600;
+  }
+  .iucn {
+    text-decoration: none;
+    padding: 0 6px;
+    border-radius: 4px;
+    background: #6c8f5a;
+    color: #fff;
+    font-size: var(--text-xs);
+  }
+  .iucn.NT {
+    background: #a0a03a;
+  }
+  .iucn.VU {
+    background: #c98a1e;
+  }
+  .iucn.EN,
+  .iucn.CR {
+    background: #b0412e;
+  }
+  .range {
+    margin: 0;
+    color: var(--color-card-ink-muted);
+  }
+  .flavour {
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.3;
+  }
+  .indigenous {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .iname {
+    font-weight: 600;
+  }
+  .lang {
+    color: var(--color-card-ink-muted);
+    font-size: var(--text-xs);
+  }
+  .foot {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1) var(--space-3);
+    padding-right: 36px;
+    color: var(--color-card-ink-muted);
+    font-size: var(--text-xs);
+  }
+  .foot p {
+    margin: 0;
+  }
+  .draft {
+    color: var(--color-card-accent);
+    font-style: italic;
+  }
+  .info {
+    position: absolute;
+    right: var(--space-3);
+    bottom: var(--space-3);
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--color-card-edge);
+    background: var(--color-card-band);
+    color: var(--color-card-ink);
+    cursor: pointer;
+  }
+  .sources {
+    max-width: min(22rem, calc(100vw - 32px));
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-line);
+    background: var(--color-surface-raised);
+    color: var(--color-ink);
+    font-size: var(--text-sm);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.5);
+  }
+  .sources p {
+    margin: 0 0 var(--space-2);
+  }
+  .sources ul {
+    margin: 0;
+    padding-left: var(--space-4);
+  }
+</style>

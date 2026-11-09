@@ -1,0 +1,213 @@
+---
+import Base from '../../layouts/Base.astro';
+import SpeciesCard from '../../components/SpeciesCard.astro';
+import { getData } from '../../lib/data.ts';
+import { HABITATS } from '../../lib/types.ts';
+
+const { cards } = await getData();
+const families = [
+  ...new Map(
+    cards.map((c) => [c.species.family, c.species.familyCommonName]),
+  ).entries(),
+]
+  .map(([value, label]) => ({
+    value,
+    label,
+    order: Math.min(
+      ...cards
+        .filter((c) => c.species.family === value)
+        .map((c) => c.species.taxonOrder),
+    ),
+  }))
+  .sort((a, b) => a.order - b.order);
+const habitats = HABITATS.filter((h) =>
+  cards.some((c) => c.species.naturalHistory?.habitat.includes(h)),
+);
+const searchText = (c: (typeof cards)[number]) =>
+  [
+    c.species.commonName,
+    c.species.scientificName,
+    c.species.nickname,
+    c.species.familyCommonName,
+    ...c.species.indigenousNames.map((n) => n.name),
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+const photographed = cards.filter((c) => c.bestPhoto).length;
+---
+
+<Base
+  title="Species"
+  description="Every bird on the Life List, as a card: habitat, diet, nest, wingspan and more."
+>
+  <h1>Species</h1>
+  <p class="page-intro">
+    {cards.length} species on the Life List, {photographed} photographed.
+    Taxonomy follows eBird/Clements.
+  </p>
+
+  {cards.length > 0 && (
+    <form class="controls" role="search" onsubmit="return false">
+      <label class="search">
+        <span class="visually-hidden">Search species</span>
+        <input
+          type="search"
+          name="q"
+          placeholder="Search names, nicknames, Indigenous names"
+        />
+      </label>
+      <label>
+        <span>Family</span>
+        <select name="family">
+          <option value="">All</option>
+          {families.map((f) => (
+            <option value={f.value}>{f.label}</option>
+          ))}
+        </select>
+      </label>
+      <label>
+        <span>Habitat</span>
+        <select name="habitat">
+          <option value="">All</option>
+          {habitats.map((h) => (
+            <option value={h}>{h}</option>
+          ))}
+        </select>
+      </label>
+      <label class="check">
+        <input type="checkbox" name="photo" /> Has photo
+      </label>
+      <label>
+        <span>Sort</span>
+        <select name="sort">
+          <option value="taxonomic">Taxonomic</option>
+          <option value="alpha">A–Z</option>
+          <option value="recent">Recently seen</option>
+        </select>
+      </label>
+      <p class="count" aria-live="polite" />
+    </form>
+  )}
+
+  <ul class="cards">
+    {cards.map((c) => (
+      <li
+        data-family={c.species.family}
+        data-habitat={(c.species.naturalHistory?.habitat ?? []).join(' ')}
+        data-photo={c.bestPhoto ? '1' : '0'}
+        data-search={searchText(c)}
+        data-taxon={c.species.taxonOrder}
+        data-name={c.species.commonName}
+        data-last={c.lastSeen}
+      >
+        <SpeciesCard card={c} />
+      </li>
+    ))}
+  </ul>
+  {cards.length === 0 && <p class="page-intro">No Sightings imported yet.</p>}
+</Base>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('.controls');
+  const items = [...document.querySelectorAll<HTMLLIElement>('.cards > li')];
+  const count = form?.querySelector('.count');
+
+  function apply() {
+    if (!form) return;
+    const f = new FormData(form);
+    const q = String(f.get('q') ?? '')
+      .trim()
+      .toLowerCase();
+    const family = String(f.get('family') ?? '');
+    const habitat = String(f.get('habitat') ?? '');
+    const photo = f.get('photo') === 'on';
+    const sort = String(f.get('sort') ?? 'taxonomic');
+
+    const sorted = [...items].sort((a, b) => {
+      if (sort === 'alpha')
+        return (a.dataset.name ?? '').localeCompare(b.dataset.name ?? '');
+      if (sort === 'recent')
+        return (b.dataset.last ?? '').localeCompare(a.dataset.last ?? '');
+      return Number(a.dataset.taxon) - Number(b.dataset.taxon);
+    });
+    let shown = 0;
+    sorted.forEach((li, i) => {
+      const ok =
+        (!q || (li.dataset.search ?? '').includes(q)) &&
+        (!family || li.dataset.family === family) &&
+        (!habitat || (li.dataset.habitat ?? '').split(' ').includes(habitat)) &&
+        (!photo || li.dataset.photo === '1');
+      li.hidden = !ok;
+      li.style.order = String(i);
+      if (ok) shown++;
+    });
+    if (count) count.textContent = `${shown} of ${items.length}`;
+  }
+  form?.addEventListener('input', apply);
+  apply();
+</script>
+
+<style>
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-4);
+    align-items: end;
+    margin-bottom: var(--space-5);
+    font-size: var(--text-sm);
+  }
+  .controls label {
+    display: grid;
+    gap: 2px;
+    color: var(--color-ink-muted);
+  }
+  .controls .check {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    min-height: 38px;
+  }
+  .search {
+    flex: 1 1 260px;
+  }
+  input[type='search'],
+  select {
+    font: inherit;
+    color: var(--color-ink);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
+    min-height: 38px;
+    text-transform: none;
+  }
+  select {
+    text-transform: capitalize;
+  }
+  input[type='checkbox'] {
+    accent-color: var(--color-first-light);
+  }
+  .count {
+    margin: 0;
+    color: var(--color-ink-muted);
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+  }
+  .cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: var(--space-5);
+    align-items: stretch;
+  }
+  .cards > li {
+    display: flex;
+  }
+  .cards > li > :global(*) {
+    flex: 1;
+  }
+</style>
