@@ -8,11 +8,24 @@
   "indigenousNames": [],
   "sensitive": false,
   "naturalHistory": {
-    "habitat": ["forest", "urban"],
-    "diet": ["nectar", "fruit", "insects"],
+    "habitat": [
+      "forest",
+      "urban"
+    ],
+    "diet": [
+      "nectar",
+      "fruit",
+      "insects"
+    ],
     "nestType": "cup",
-    "lengthCm": [27, 32],
-    "clutch": [2, 4],
+    "lengthCm": [
+      27,
+      32
+    ],
+    "clutch": [
+      2,
+      4
+    ],
     "iucn": "LC",
     "migration": "resident",
     "range": "Throughout New Zealand.",

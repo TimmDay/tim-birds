@@ -8,11 +8,23 @@
   "indigenousNames": [],
   "sensitive": false,
   "naturalHistory": {
-    "habitat": ["grassland", "woodland", "coastal"],
-    "diet": ["insects"],
+    "habitat": [
+      "grassland",
+      "woodland",
+      "coastal"
+    ],
+    "diet": [
+      "insects"
+    ],
     "nestType": "burrow",
-    "lengthCm": [19, 21],
-    "clutch": [3, 7],
+    "lengthCm": [
+      19,
+      21
+    ],
+    "clutch": [
+      3,
+      7
+    ],
     "iucn": "LC",
     "migration": "partial migrant",
     "range": "Australia; southern birds winter in the north and New Guinea.",

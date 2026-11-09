@@ -9,12 +9,28 @@
   "indigenousNames": [],
   "sensitive": false,
   "naturalHistory": {
-    "habitat": ["woodland", "forest", "urban"],
-    "diet": ["vertebrates", "insects"],
+    "habitat": [
+      "woodland",
+      "forest",
+      "urban"
+    ],
+    "diet": [
+      "vertebrates",
+      "insects"
+    ],
     "nestType": "hollow",
-    "wingspanCm": [65, 65],
-    "lengthCm": [39, 42],
-    "clutch": [2, 4],
+    "wingspanCm": [
+      65,
+      65
+    ],
+    "lengthCm": [
+      39,
+      42
+    ],
+    "clutch": [
+      2,
+      4
+    ],
     "iucn": "LC",
     "migration": "resident",
     "range": "Eastern Australia; introduced to the south-west and Tasmania.",

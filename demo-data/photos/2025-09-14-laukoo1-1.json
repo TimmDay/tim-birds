@@ -12,7 +12,12 @@
     "key": "demo-images/2025-09-14-laukoo1-1",
     "width": 2400,
     "height": 1600,
-    "widths": [480, 960, 1600, 2400],
+    "widths": [
+      480,
+      960,
+      1600,
+      2400
+    ],
     "placeholder": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACQAwCdASoYABAAPu1iqk2ppaQiMAgBMB2JZQCsACz1KP8oppKQAP7XOwrExg2+Wab4DiRhoPT0oapfLW1jGriJYwAAAA=="
   },
   "camera": {

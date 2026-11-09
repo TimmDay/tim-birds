@@ -8,11 +8,23 @@
   "indigenousNames": [],
   "sensitive": false,
   "naturalHistory": {
-    "habitat": ["forest", "woodland"],
-    "diet": ["seeds", "fruit"],
+    "habitat": [
+      "forest",
+      "woodland"
+    ],
+    "diet": [
+      "seeds",
+      "fruit"
+    ],
     "nestType": "hollow",
-    "lengthCm": [32, 37],
-    "clutch": [4, 8],
+    "lengthCm": [
+      32,
+      37
+    ],
+    "clutch": [
+      4,
+      8
+    ],
     "iucn": "LC",
     "migration": "resident",
     "range": "Eastern and south-eastern Australia.",

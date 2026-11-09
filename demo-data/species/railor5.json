@@ -8,12 +8,28 @@
   "indigenousNames": [],
   "sensitive": false,
   "naturalHistory": {
-    "habitat": ["woodland", "urban", "coastal"],
-    "diet": ["nectar", "fruit"],
+    "habitat": [
+      "woodland",
+      "urban",
+      "coastal"
+    ],
+    "diet": [
+      "nectar",
+      "fruit"
+    ],
     "nestType": "hollow",
-    "wingspanCm": [42, 46],
-    "lengthCm": [25, 30],
-    "clutch": [2, 3],
+    "wingspanCm": [
+      42,
+      46
+    ],
+    "lengthCm": [
+      25,
+      30
+    ],
+    "clutch": [
+      2,
+      3
+    ],
     "iucn": "LC",
     "migration": "nomadic",
     "range": "Coastal northern and eastern Australia.",

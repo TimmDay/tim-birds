@@ -11,7 +11,12 @@
     "key": "demo-images/2025-05-11-supfai1-1",
     "width": 2400,
     "height": 1600,
-    "widths": [480, 960, 1600, 2400],
+    "widths": [
+      480,
+      960,
+      1600,
+      2400
+    ],
     "placeholder": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAAAQAwCdASoYABAAPu1iqU2zpaOmMAgCcB2JYgCdMoAEhwAA/u1mZtmSJ1ZrKKbvszJnJT8TQwcAAA=="
   },
   "camera": {

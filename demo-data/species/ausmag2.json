@@ -15,12 +15,28 @@
   ],
   "sensitive": false,
   "naturalHistory": {
-    "habitat": ["grassland", "woodland", "urban"],
-    "diet": ["insects", "other invertebrates"],
+    "habitat": [
+      "grassland",
+      "woodland",
+      "urban"
+    ],
+    "diet": [
+      "insects",
+      "other invertebrates"
+    ],
     "nestType": "cup",
-    "wingspanCm": [65, 85],
-    "lengthCm": [37, 43],
-    "clutch": [2, 5],
+    "wingspanCm": [
+      65,
+      85
+    ],
+    "lengthCm": [
+      37,
+      43
+    ],
+    "clutch": [
+      2,
+      5
+    ],
     "iucn": "LC",
     "migration": "resident",
     "range": "Most of Australia and southern New Guinea.",

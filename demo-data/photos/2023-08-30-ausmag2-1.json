@@ -12,7 +12,12 @@
     "key": "demo-images/2023-08-30-ausmag2-1",
     "width": 2400,
     "height": 1600,
-    "widths": [480, 960, 1600, 2400],
+    "widths": [
+      480,
+      960,
+      1600,
+      2400
+    ],
     "placeholder": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAACwAwCdASoYABAAPu1orU2ppqSiMAgBMB2JaQAARdGTsEvLENHUQAD+31/SdnIZ1yj1/4gwjLQxoeFUAAA="
   },
   "camera": {

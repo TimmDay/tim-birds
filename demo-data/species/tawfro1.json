@@ -8,11 +8,24 @@
   "indigenousNames": [],
   "sensitive": false,
   "naturalHistory": {
-    "habitat": ["woodland", "forest", "urban"],
-    "diet": ["insects", "vertebrates"],
+    "habitat": [
+      "woodland",
+      "forest",
+      "urban"
+    ],
+    "diet": [
+      "insects",
+      "vertebrates"
+    ],
     "nestType": "platform",
-    "lengthCm": [34, 53],
-    "clutch": [1, 3],
+    "lengthCm": [
+      34,
+      53
+    ],
+    "clutch": [
+      1,
+      3
+    ],
     "iucn": "LC",
     "migration": "resident",
     "range": "Throughout mainland Australia and Tasmania.",

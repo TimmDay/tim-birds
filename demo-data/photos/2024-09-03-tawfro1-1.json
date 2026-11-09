@@ -12,7 +12,12 @@
     "key": "demo-images/2024-09-03-tawfro1-1",
     "width": 2400,
     "height": 1600,
-    "widths": [480, 960, 1600, 2400],
+    "widths": [
+      480,
+      960,
+      1600,
+      2400
+    ],
     "placeholder": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADwAgCdASoYABAAPu1iqU2zpaQmMAgCcB2JZwC/ODLxQAD+6HQWhsE3ag6L7K+P4VAAAA=="
   },
   "camera": {

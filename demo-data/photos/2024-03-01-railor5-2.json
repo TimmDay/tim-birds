@@ -12,7 +12,11 @@
     "key": "demo-images/2024-03-01-railor5-2",
     "width": 1600,
     "height": 2000,
-    "widths": [480, 960, 1600],
+    "widths": [
+      480,
+      960,
+      1600
+    ],
     "placeholder": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAAAQAwCdASoYAB4APu1ur1ItJiQiqAgBoB2JYgCzgBatm8AA/tJFFsmr9etLc2/wUFbJiJpqNibZZhlA2veG8vG2AAA="
   },
   "camera": {
