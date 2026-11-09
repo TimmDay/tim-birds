@@ -74,7 +74,7 @@ describe('toDarwinCore', () => {
   it('maps a Sighting to a Darwin Core Occurrence', () => {
     expect(occurrences[0]).toEqual({
       occurrenceID: 'tim-bird:sighting:ebird-S100-laukoo1',
-      references: 'https://tim-bird.pages.dev/sightings/ebird-S100-laukoo1/',
+      references: 'https://ebird.org/checklist/S100',
       basisOfRecord: 'HumanObservation',
       occurrenceStatus: 'present',
       recordedBy: 'Tim Day',
@@ -115,6 +115,22 @@ describe('toDarwinCore', () => {
     expect(row?.coordinateUncertaintyInMeters).toBe('');
     expect(row?.geodeticDatum).toBe('');
     expect(row?.dynamicProperties).toBe('');
+    expect(row?.references).toBe('');
+  });
+
+  it('references the Photo page for a Photo Sighting', () => {
+    const photoSighting: Sighting = {
+      ...hidden,
+      id: 'photo-x',
+      sensitive: false,
+    };
+    const { occurrences: rows } = toDarwinCore(
+      [photoSighting],
+      [{ ...photo, id: 'px', sightingId: 'photo-x' }],
+      { laukoo1: kookaburra },
+      config,
+    );
+    expect(rows[0]?.references).toBe('https://tim-bird.pages.dev/photos/px/');
   });
 
   it('maps each Photo to a Simple Multimedia row on its Occurrence', () => {

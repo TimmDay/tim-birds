@@ -1,0 +1,293 @@
+---
+import Base from '../layouts/Base.astro';
+import { getData } from '../lib/data.ts';
+import { formatDate } from '../lib/format.ts';
+
+const { cards, photos, sightings } = await getData();
+const countries = new Set(sightings.map((s) => s.countryCode)).size;
+const states = new Set(sightings.flatMap((s) => s.stateProvince ?? [])).size;
+
+// New Life List Species ("lifers") per year, every year from the first to the last.
+const byYear = new Map<number, number>();
+for (const c of cards) {
+  const y = Number(c.firstSeen.slice(0, 4));
+  byYear.set(y, (byYear.get(y) ?? 0) + 1);
+}
+const years = [...byYear.keys()];
+const first = Math.min(...years);
+const last = Math.max(...years);
+const series = years.length
+  ? Array.from({ length: last - first + 1 }, (_, i) => ({
+      year: first + i,
+      count: byYear.get(first + i) ?? 0,
+    }))
+  : [];
+const max = Math.max(1, ...series.map((d) => d.count));
+const labelled = new Set([
+  series.findIndex((d) => d.count === max),
+  series.length - 1,
+]);
+
+const families = [
+  ...Map.groupBy(cards, (c) => c.species.familyCommonName).entries(),
+]
+  .map(([name, cs]) => ({ name, count: cs.length }))
+  .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+  .slice(0, 6);
+const latest = [...cards].sort((a, b) =>
+  b.firstSeen.localeCompare(a.firstSeen),
+)[0];
+---
+
+<Base
+  title="About"
+  description="Tim Day: bird photography, biodiversity data and software engineering."
+>
+  <h1>About</h1>
+
+  <section aria-labelledby="stats">
+    <h2 id="stats" class="visually-hidden">
+      Life List in numbers
+    </h2>
+    <dl class="tiles">
+      <div>
+        <dt>Species</dt>
+        <dd>{cards.length}</dd>
+      </div>
+      <div>
+        <dt>Sightings</dt>
+        <dd>{sightings.length}</dd>
+      </div>
+      <div>
+        <dt>Photos</dt>
+        <dd>{photos.length}</dd>
+      </div>
+      <div>
+        <dt>Countries</dt>
+        <dd>{countries}</dd>
+      </div>
+      <div>
+        <dt>States</dt>
+        <dd>{states}</dd>
+      </div>
+    </dl>
+    {latest && (
+      <p class="latest">
+        Most recent new species:{' '}
+        <a href={`/species/${latest.species.code}/`}>
+          {latest.species.commonName}
+        </a>
+        , {formatDate(latest.firstSeen)}.
+      </p>
+    )}
+
+    {series.length > 0 && (
+      <figure class="chart">
+        <figcaption>New species per year</figcaption>
+        <div
+          class="plot"
+          role="img"
+          aria-label={`New species per year, ${first} to ${last}. Highest: ${max}.`}
+        >
+          {series.map((d, i) => (
+            <div
+              class="col"
+              tabindex="0"
+              data-tip={`${d.year}: ${d.count} new species`}
+            >
+              <span
+                class="value"
+                class:list={{ hidden: !labelled.has(i) || d.count === 0 }}
+              >
+                {d.count}
+              </span>
+              <span class="bar" style={`height: ${(d.count / max) * 100}%`} />
+              <span class="year">{d.year}</span>
+            </div>
+          ))}
+        </div>
+        <details>
+          <summary>Show as a table</summary>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Year</th>
+                <th scope="col">New species</th>
+              </tr>
+            </thead>
+            <tbody>
+              {series.map((d) => (
+                <tr>
+                  <td>{d.year}</td>
+                  <td>{d.count}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </details>
+      </figure>
+    )}
+
+    {families.length > 0 && (
+      <div class="families">
+        <h3>Most-seen families</h3>
+        <ol>
+          {families.map((f) => (
+            <li>
+              <span>{f.name}</span> <span class="n">{f.count}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    )}
+    <p>
+      <a href="/data/">How the data is modelled and published →</a>
+    </p>
+  </section>
+
+  <section class="bio" aria-labelledby="bio">
+    <h2 id="bio">Tim Day</h2>
+    <!-- Placeholder copy: Tim writes the real bio (see the "Write the About page bio" issue). -->
+    <p>
+      Lorem ipsum dolor sit amet: software engineer working with data.
+      Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+      dolore magna aliqua.
+    </p>
+    <p>
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+      aliquip ex ea commodo consequat.
+    </p>
+    <p class="links">
+      <a href="https://github.com/TimmDay">GitHub</a>
+    </p>
+
+    <h3>Gear</h3>
+    <p>Lorem ipsum: camera body, lens.</p>
+  </section>
+</Base>
+
+<style>
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--space-3);
+    margin: 0 0 var(--space-4);
+  }
+  .tiles div {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+  }
+  .tiles dt {
+    color: var(--color-ink-muted);
+    font-size: var(--text-sm);
+  }
+  .tiles dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    line-height: 1.1;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .latest {
+    color: var(--color-ink-muted);
+  }
+  .chart {
+    margin: var(--space-6) 0;
+  }
+  figcaption {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-3);
+  }
+  .plot {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    height: 200px;
+    padding-top: 1.4rem;
+    border-bottom: 1px solid var(--color-line);
+    max-width: 720px;
+  }
+  .col {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    outline-offset: 2px;
+  }
+  .bar {
+    width: min(24px, 70%);
+    background: var(--color-first-light);
+    border-radius: 4px 4px 0 0;
+    min-height: 0;
+  }
+  .value {
+    font-size: var(--text-xs);
+    color: var(--color-ink);
+    margin-bottom: 2px;
+  }
+  .value.hidden {
+    visibility: hidden;
+  }
+  .year {
+    position: absolute;
+    bottom: -1.4rem;
+    font-size: var(--text-xs);
+    color: var(--color-ink-muted);
+  }
+  .col:nth-child(even) .year {
+    visibility: hidden;
+  }
+  .plot:has(.col:nth-child(-n + 8):last-child) .year {
+    visibility: visible;
+  }
+  .col:hover .bar,
+  .col:focus-visible .bar {
+    background: var(--color-gold);
+  }
+  .col:hover::after,
+  .col:focus-visible::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 4px);
+    white-space: nowrap;
+    padding: var(--space-1) var(--space-2);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    z-index: 1;
+  }
+  details {
+    margin-top: var(--space-6);
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+  table {
+    border-collapse: collapse;
+    margin-top: var(--space-2);
+  }
+  th,
+  td {
+    text-align: left;
+    padding: 2px var(--space-4) 2px 0;
+  }
+  .families ol {
+    padding-left: var(--space-5);
+    max-width: 28rem;
+  }
+  .families li {
+    padding: 2px 0;
+  }
+  .n {
+    color: var(--color-ink-muted);
+  }
+  .bio {
+    margin-top: var(--space-7);
+    max-width: 68ch;
+  }
+</style>
