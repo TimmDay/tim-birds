@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { findMatchingSightings, mergeSightings } from './sightings.ts';
+import {
+  applySensitivity,
+  findMatchingSightings,
+  mergeSightings,
+} from './sightings.ts';
 import type { Sighting } from './types.ts';
 
 const base = {
@@ -90,5 +94,48 @@ describe('findMatchingSightings', () => {
       findMatchingSightings(all, 'laukoo1', '2025-01-02').map((s) => s.id),
     ).toEqual(['ebird-S2-laukoo1']);
     expect(findMatchingSightings(all, 'ausmag2', '2025-01-02')).toEqual([]);
+  });
+});
+
+describe('applySensitivity', () => {
+  const open: Sighting = {
+    ...ebird('ebird-S1-laukoo1', '2025-01-01'),
+    location: {
+      decimalLatitude: -28.2,
+      decimalLongitude: 153.1,
+      locality: 'Lamington NP',
+      dataGeneralizations: 'Coordinates rounded to 0.1 degrees.',
+    },
+  };
+
+  it('withholds every Sighting of a Species flagged sensitive, Photo Sightings included', () => {
+    const out = applySensitivity(
+      [open, { ...photoSighting, location: open.location }],
+      {
+        sensitiveSpecies: new Set(['laukoo1']),
+        nestSightings: new Set(),
+      },
+    );
+    for (const s of out) {
+      expect(s.sensitive).toBe(true);
+      expect(s.location.decimalLatitude).toBeUndefined();
+      expect(s.location.locality).toBeUndefined();
+    }
+  });
+
+  it('withholds a Sighting that has a nest Photo', () => {
+    const [s] = applySensitivity([open], {
+      sensitiveSpecies: new Set(),
+      nestSightings: new Set(['ebird-S1-laukoo1']),
+    });
+    expect(s?.sensitive).toBe(true);
+  });
+
+  it('leaves other Sightings alone', () => {
+    const [s] = applySensitivity([open], {
+      sensitiveSpecies: new Set(['powowl1']),
+      nestSightings: new Set(),
+    });
+    expect(s).toBe(open);
   });
 });

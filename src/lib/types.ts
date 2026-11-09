@@ -56,8 +56,9 @@ export type NestType = (typeof NEST_TYPES)[number];
 
 /** The true coordinates of a Sighting. Private: lives only in private/, never committed. */
 export type ExactLocation = {
-  lat: number;
-  lon: number;
+  /** Absent when the camera recorded no GPS and Tim gave none. */
+  lat?: number;
+  lon?: number;
   place?: string;
 };
 

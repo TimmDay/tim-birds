@@ -1,5 +1,6 @@
 // Loads the content collections and joins them. Build time only.
 import { getCollection } from 'astro:content';
+import { DEMO, IMAGE_BASE } from '../config.ts';
 import type { GalleryPhoto } from './filters.ts';
 import { bestPhoto, lifeList } from './lifelist.ts';
 import type { photoSchema, sightingSchema, speciesSchema } from './schema.ts';
@@ -47,6 +48,13 @@ async function load() {
     return { ...p, sighting, species: sp };
   });
   photos.sort((a, b) => b.takenAt.localeCompare(a.takenAt));
+
+  // On Cloudflare Pages, images must come from R2: fail loudly rather than ship broken images.
+  if (process.env.CF_PAGES && !DEMO && photos.length && !IMAGE_BASE) {
+    throw new Error(
+      'PUBLIC_IMAGE_BASE is not set on Cloudflare Pages (see issue #7).',
+    );
+  }
 
   for (const s of sightings) {
     if (!species[s.speciesCode])

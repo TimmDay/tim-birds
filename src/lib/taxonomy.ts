@@ -20,6 +20,8 @@ export type Taxonomy = {
   /** An eBird scientific name (any category) → the Species it counts as, if any. */
   resolve: (scientificName: string) => Species | undefined;
   byCode: (code: SpeciesCode) => Species | undefined;
+  /** Every Species, in taxonomic order. */
+  all: () => Species[];
 };
 
 /** Builds a lookup from the eBird/Clements taxonomy CSV (scripts/data/ebird-taxonomy.csv). */
@@ -51,5 +53,6 @@ export function createTaxonomy(csv: string): Taxonomy {
       return undefined;
     },
     byCode: (code) => species.get(code),
+    all: () => [...species.values()],
   };
 }
