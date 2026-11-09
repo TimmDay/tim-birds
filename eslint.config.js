@@ -6,7 +6,17 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig(
-  { ignores: ['dist/', '.astro/', 'node_modules/', 'private/'] },
+  {
+    ignores: [
+      'dist/',
+      '.astro/',
+      'node_modules/',
+      'private/',
+      'public/vendor/',
+      'public/p/',
+      'public/demo-images/',
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...astro.configs.recommended,
