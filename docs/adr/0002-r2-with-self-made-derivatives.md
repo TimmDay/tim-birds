@@ -1,0 +1,3 @@
+# Photos on Cloudflare R2, resized by our own CLI
+
+Photos are served from Cloudflare R2 (10 GB free, zero egress) as pre-generated AVIF/WebP derivatives at fixed widths plus a blur placeholder, all produced locally by the `add-photo` CLI. We chose this over Cloudinary, which coin-cabinet already uses, because Cloudinary's free tier caps monthly credits and ties every image URL to its transform service, while R2 is plain files under our own domain at $0 for the expected few hundred photos a year. The cost is that resizing, format choice and placeholders are our code, not a service's: changing derivative sizes means re-running the CLI over all originals, which stay on Tim's own disk.
