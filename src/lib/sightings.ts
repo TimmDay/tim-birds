@@ -1,0 +1,36 @@
+import type { Sighting, SpeciesCode } from './types';
+
+const byDateThenId = (a: Sighting, b: Sighting) =>
+  a.eventDate.localeCompare(b.eventDate) || a.id.localeCompare(b.id);
+
+/**
+ * Merges a fresh eBird import into the existing Sightings. Same id → updated
+ * in place, keeping Tim's sensitive flag. Photo Sightings and eBird Sightings
+ * absent from the import are kept: an import never deletes.
+ */
+export function mergeSightings(
+  existing: Sighting[],
+  imported: Sighting[],
+): Sighting[] {
+  const byId = new Map(existing.map((s) => [s.id, s]));
+  for (const next of imported) {
+    const prev = byId.get(next.id);
+    if (prev?.origin === 'photo') continue;
+    byId.set(next.id, {
+      ...next,
+      sensitive: next.sensitive || (prev?.sensitive ?? false),
+    });
+  }
+  return [...byId.values()].sort(byDateThenId);
+}
+
+/** Candidate Sightings for a new Photo: same Species, same day. */
+export function findMatchingSightings(
+  sightings: Sighting[],
+  speciesCode: SpeciesCode,
+  date: string,
+): Sighting[] {
+  return sightings.filter(
+    (s) => s.speciesCode === speciesCode && s.eventDate === date,
+  );
+}
