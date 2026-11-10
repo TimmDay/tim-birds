@@ -55,7 +55,6 @@ const front = treeline(1600, 46, 42);
       </ul>
     </nav>
   </div>
-  {size === 'tall' && <p class="tagline">Birds, as the light comes up</p>}
   <svg
     class="birds"
     aria-hidden="true"
@@ -79,7 +78,7 @@ const front = treeline(1600, 46, 42);
 
 <style>
   .sky {
-    --nav-h: 150px;
+    --nav-h: 112px;
     --sag: 1.6vw;
     --earth-r: 780vw;
     position: relative;
@@ -89,14 +88,14 @@ const front = treeline(1600, 46, 42);
     overflow: hidden;
   }
   .sky.tall {
-    --nav-h: 260px;
+    --nav-h: 195px;
   }
   @media (min-width: 1024px) {
     .sky {
-      --nav-h: 180px;
+      --nav-h: 135px;
     }
     .sky.tall {
-      --nav-h: 320px;
+      --nav-h: 240px;
     }
   }
 
@@ -156,17 +155,6 @@ const front = treeline(1600, 46, 42);
   nav a:hover,
   nav a[aria-current='page'] {
     color: var(--color-gold);
-  }
-
-  .tagline {
-    max-width: var(--page-width);
-    margin: var(--space-5) auto 0;
-    padding: 0 var(--gutter);
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: var(--text-xl);
-    color: var(--color-ink);
-    opacity: 0.85;
   }
 
   .birds {
